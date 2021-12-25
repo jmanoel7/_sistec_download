@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}SISTEC-DOWNLOAD: upload de arquivos para login{% endblock %}
+{% block h1 %}SISTEC-DOWNLOAD: upload de arquivos para login{% endblock %}
+{% block error %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+    <form method="post" enctype="multipart/form-data">
+        <p>
+            <label for="cookies">Upload cookies.json:</label>
+            <input type="file" id="cookies" name="cookies_json">
+        </p>
+        <p>
+            <label for="sistec">Upload sistec.html:</label>
+            <input type="file" id="sistec" name="sistec_html"><br/>
+        </p>
+        <p>
+            <input type="submit" value="Upload">
+        </p>
+    </form>
+{% endblock %}

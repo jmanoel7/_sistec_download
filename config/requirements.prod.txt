@@ -1,0 +1,3 @@
+# PARA EXECUTAR
+pycurl
+Flask

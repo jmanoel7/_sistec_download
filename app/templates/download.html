@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block title %}SISTEC-DOWNLOAD: escolher planilhas para baixar{% endblock %}
+{% block h1 %}SISTEC-DOWNLOAD: escolher planilhas para baixar{% endblock %}
+{% block error %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    <dl> <!-- INICIO DO FORMULARIO -->
+    <h2><dt>
+        <input type="checkbox" id="planilhas_presencial" name="campi_presencial" value="1" {% if presencial[0] %}checked{% endif %}></input>
+        <label for="planilhas_presencial">Planilhas de Cursos Presenciais</label>
+    </dt></h2>
+    {% for key, tupla in presencial[2].items() %}
+    <h3><dd>
+        <input type="checkbox" id="{{ 'pre_%s'|format(key + tupla[0]) }}" name="{{ 'pre_%s'|format(key + tupla[0]) }}" value="1" {% if tupla[3] %}checked{% endif %}></input>
+        <label for="{{ 'pre_%s'|format(key + tupla[0]) }}">{{ tupla[1].decode('utf-8') + '     ( ' + tupla[2] + ' )' }}</label>
+    </dd></h3>
+    {% endfor %}
+    <h2><dt>
+        <input type="checkbox" id="planilhas_ead" name="campi_ead" value="1" {% if ead[0] %}checked{% endif %}></input>
+        <label for="planilhas_ead">Planilhas de Cursos EaD</label>
+    </dt></h2>
+    {% for key, tupla in ead[2].items() %}
+    <h3><dd>
+        <input type="checkbox" id="{{ 'ead_%s'|format(key + tupla[0]) }}" name="{{ 'ead_%s'|format(key + tupla[0]) }}" value="1" {% if tupla[3] %}checked{% endif %}></input>
+        <label for="{{ 'ead_%s'|format(key + tupla[0]) }}">{{ tupla[1].decode('utf-8') + '     ( ' + tupla[2] + ' )' }}</label>
+    </dd></h3>
+    {% endfor %}
+    <h2><dt>
+        <input type="checkbox" id="planilhas_fic" name="campi_fic" value="1" {% if fic[0] %}checked{% endif %}></input>
+        <label for="planilhas_fic">Planilhas de Cursos FIC</label>
+    </dt></h2>
+    {% for key, tupla in fic[2].items() %}
+    <h3><dd>
+        <input type="checkbox" id="{{ 'fic_%s'|format(key + tupla[0]) }}" name="{{ 'fic_%s'|format(key + tupla[0]) }}" value="1" {% if tupla[3] %}checked{% endif %}></input>
+        <label for="{{ 'fic_%s'|format(key + tupla[0]) }}">{{ tupla[1].decode('utf-8') + '     ( ' + tupla[2] + ' )' }}</label>
+    </dd></h3>
+    {% endfor %}
+    </dl> <!-- FIM DO FORMULARIO -->
+    <input type="submit" value="Download">
+</form>
+{% endblock %}
+{% block script %}
+{{ super() }}
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#planilhas_presencial").change(function(){
+        if ($("#planilhas_presencial").prop("checked")) {
+            {% for key, tupla in presencial[2].items() %}
+                $("{{ '#pre_%s'|format(key + tupla[0]) }}").prop("checked", true);
+            {% endfor %}
+        } else {
+            {% for key, tupla in presencial[2].items() %}
+                $("{{ '#pre_%s'|format(key + tupla[0]) }}").prop("checked", false);
+            {% endfor %}
+        }
+    });
+    {% for key, tupla in presencial[2].items() %}
+        $("{{ '#pre_%s'|format(key + tupla[0]) }}").change(function(){
+            if ($("{{ '#pre_%s'|format(key + tupla[0]) }}").prop("checked")) {
+                $("#planilhas_presencial").prop("checked", true);
+            }
+            if ({% for _key, _tupla in presencial[2].items() %} (! $("{{ '#pre_%s'|format(_key + _tupla[0]) }}").prop("checked") ) && {% endfor %} true) {
+                $("#planilhas_presencial").prop("checked", false);
+            }
+            {% for _key, _tupla in presencial[2].items() %}
+                // mesmo campus
+                {% if tupla[1] == _tupla[1] %}
+                    // diferentes perfis
+                    {% if tupla[2] != _tupla[2] %}
+                        if ($("{{ '#pre_%s'|format(key + tupla[0]) }}").prop("checked")) {
+                            $("{{ '#pre_%s'|format(_key + _tupla[0]) }}").prop("checked", false);
+                        }
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        });
+    {% endfor %}
+    $("#planilhas_ead").change(function(){
+        if ($("#planilhas_ead").prop("checked")) {
+            {% for key, tupla in ead[2].items() %}
+                $("{{ '#ead_%s'|format(key + tupla[0]) }}").prop("checked", true);
+            {% endfor %}
+        } else {
+            {% for key, tupla in ead[2].items() %}
+                $("{{ '#ead_%s'|format(key + tupla[0]) }}").prop("checked", false);
+            {% endfor %}
+        }
+    });
+    {% for key, tupla in ead[2].items() %}
+        $("{{ '#ead_%s'|format(key + tupla[0]) }}").change(function(){
+            if ($("{{ '#ead_%s'|format(key + tupla[0]) }}").prop("checked")) {
+                $("#planilhas_ead").prop("checked", true);
+            }
+            if ({% for _key, _tupla in ead[2].items() %} (! $("{{ '#ead_%s'|format(_key + _tupla[0]) }}").prop("checked") ) && {% endfor %} true) {
+                $("#planilhas_ead").prop("checked", false);
+            }
+            {% for _key, _tupla in ead[2].items() %}
+                // mesmo campus
+                {% if tupla[1] == _tupla[1] %}
+                    // diferentes perfis
+                    {% if tupla[2] != _tupla[2] %}
+                        if ($("{{ '#ead_%s'|format(key + tupla[0]) }}").prop("checked")) {
+                            $("{{ '#ead_%s'|format(_key + _tupla[0]) }}").prop("checked", false);
+                        }
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        });
+    {% endfor %}
+    $("#planilhas_fic").change(function(){
+        if ($("#planilhas_fic").prop("checked")) {
+            {% for key, tupla in fic[2].items() %}
+                $("{{ '#fic_%s'|format(key + tupla[0]) }}").prop("checked", true);
+            {% endfor %}
+        } else {
+            {% for key, tupla in fic[2].items() %}
+                $("{{ '#fic_%s'|format(key + tupla[0]) }}").prop("checked", false);
+            {% endfor %}
+        }
+    });
+    {% for key, tupla in fic[2].items() %}
+        $("{{ '#fic_%s'|format(key + tupla[0]) }}").change(function(){
+            if ($("{{ '#fic_%s'|format(key + tupla[0]) }}").prop("checked")) {
+                $("#planilhas_fic").prop("checked", true);
+            }
+            if ({% for _key, _tupla in fic[2].items() %} (! $("{{ '#fic_%s'|format(_key + _tupla[0]) }}").prop("checked") ) && {% endfor %} true) {
+                $("#planilhas_fic").prop("checked", false);
+            }
+            {% for _key, _tupla in fic[2].items() %}
+                // mesmo campus
+                {% if tupla[1] == _tupla[1] %}
+                    // diferentes perfis
+                    {% if tupla[2] != _tupla[2] %}
+                        if ($("{{ '#fic_%s'|format(key + tupla[0]) }}").prop("checked")) {
+                            $("{{ '#fic_%s'|format(_key + _tupla[0]) }}").prop("checked", false);
+                        }
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        });
+    {% endfor %}
+});
+</script>
+{% endblock %}

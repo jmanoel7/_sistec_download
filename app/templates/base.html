@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+	<head>
+		<title>{% block title %}{% endblock %}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+	</head>
+	<body>
+        <h1>{% block h1 %}{% endblock %}</h1>
+        {% block error %}
+	        {% if error %}
+                <div id="error">
+                    {{ error }}
+                </div>
+            {% endif %}
+        {% endblock %}
+        <div id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div id="footer">
+            <p>&copy; Copyright 2021 por <a href="https://ifg.edu.br/ensino?showall=&start=9">Equipe DGA</a> /
+                <a href="https://ifg.edu.br/ensino">PROEN</a> /
+                <a href="https://ifg.edu.br/reitoria">REITORIA</a> /
+                <a href="https://ifg.edu.br">IFG</a>
+            </p>
+            <p>D&uacute;vidas: <a href="mailto:joao.nogueira@ifg.edu.br">joao.nogueira@ifg.edu.br</a></p>
+        </div>
+    </body>
+    {% block script %}
+        <script type="text/javascript" src="{{ url_for('static', filename='jquery-3.5.1.slim.min.js') }}"></script>
+    {% endblock %}
+</html>

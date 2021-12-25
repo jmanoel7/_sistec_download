@@ -1,0 +1,6 @@
+# PARA EXECUTAR
+pycurl
+Flask
+
+# PARA TESTES
+jupyterlab
