@@ -1,11 +1,9 @@
 1. [Instalação Back-End](#instalação-back-end)
-    1. [Baixe e instale o Ubuntu Server 20.04.2](#baixe-e-instale-o-ubuntu-server-20042)
+    1. [Baixe e instale o Debian GNU/Linux Bullseye](#baixe-e-instale-o-debian-gnu-linux-bullseye)
     2. [Atualizando o servidor](#atualizando-o-servidor)
     3. [Configurando o locale](#configurando-o-locale)
     4. [Instalando o git e o curl](#instalando-o-git-e-o-curl)
     5. [Baixando o sistec_download](#baixando-o-sistec_download)
-        1. [via git](#via-git)
-        2. [via tarball](#via-tarball)
     6. [Instalando o Python3.8](#instalando-o-python38)
     7. [Configurando o Virtualenv](#configurando-o-virtualenv)
     8. [Instalando o Apache2](#instalando-o-apache2)
@@ -24,89 +22,84 @@
 
 ## Instalação Back-End
 
-### Baixe e instale o Ubuntu Server 20.04.2
+### Baixe e instale o Debian GNU/Linux Bullseye
 
-[![Download Ubuntu Server 20.04.2](img/get-ubuntu-server.png "Baixar Ubuntu Server 20.04.2")](https://ubuntu.com/download/server)
+- Para baixar no diretório corrente:
+```sh
+curl -L -O http://sft.if.usp.br/debian-cd/11.2.0/amd64/iso-cd/debian-11.2.0-amd64-netinst.iso
+```
 
-[![Install Ubuntu Server 20.04.2](img/install-ubuntu-server.png "Instalar Ubuntu Server 20.04.2")](https://ubuntu.com/server/docs)
+- Guia de Instalação acessado a partir do navegador firefox:
+
+```sh
+firefox https://www.debian.org/releases/bullseye/amd64/index.pt.html
+```
 
 ### Atualizando o servidor
 
 ```sh
-$ sudo apt clean
-$ sudo apt update
-$ sudo apt upgrade
+sudo apt clean
+sudo apt update
+sudo apt upgrade
 ```
 
 ### Configurando o locale
 
 ```sh
-$ sudo apt install locales
-$ sudo sed -i 's|# pt_BR.UTF-8 UTF-8|pt_BR.UTF-8 UTF-8|' /etc/locale.gen
-$ sudo sed -i 's|# en_US.UTF-8 UTF-8|en_US.UTF-8 UTF-8|' /etc/locale.gen
-$ sudo locale-gen
-$ sudo update-locale LANG="pt_BR.UTF-8" LANGUAGE="pt_BR:en_US"
+sudo apt install locales
+sudo sed -i 's|# pt_BR.UTF-8 UTF-8|pt_BR.UTF-8 UTF-8|' /etc/locale.gen
+sudo sed -i 's|# en_US.UTF-8 UTF-8|en_US.UTF-8 UTF-8|' /etc/locale.gen
+sudo locale-gen
+sudo update-locale LANG="pt_BR.UTF-8" LANGUAGE="pt_BR:en_US"
 ```
 
 ### Instalando o git e o curl
 
 ```sh
-$ sudo apt install git curl
+sudo apt install git curl
 ```
 
 ### Baixando o sistec_download
 
-Logo abaixo, tanto [via git](#via-git) como [via tarball](#via-tarball), onde constar: `sudo chown ubuntu.ubuntu -R /srv/www`  
-troque por: `sudo chown usuario.grupo -R /srv/www`  
-aonde: "usuario" e "grupo" são o usuário e o grupo que executarão o sistema  
-
-#### via git
-
 ```sh
-$ sudo mkdir -p /srv/www
-$ sudo chown ubuntu.ubuntu -R /srv/www
-$ cd /srv/www
-$ git clone https://gitlab.ifg.edu.br/2219692/sistec_download.git
-$ cd sistec_download
+sudo mkdir -p /srv/www
+sudo chown www-data.www-data -R /srv/www
+sudo chmod g+w -R /srv/www
+sudo usermod -a -G www-data SEU_USUARIO
+cd /srv/www
+git clone https://github.com/jmanoel7/sistec_download.git
+cd sistec_download
 ```
+***OBS:*** logo acima, onde consta SEU_USUARIO, ponha o seu usuário do sistema Debian (que não é o root)
 
-#### via tarball
-
-```sh
-$ sudo mkdir -p /srv/www
-$ sudo chown ubuntu.ubuntu -R /srv/www
-$ cd /srv/www
-$ curl -L -O https://gitlab.ifg.edu.br/2219692/sistec_download/-/archive/master/sistec_download-master.tar.gz
-$ tar xzf sistec_download-master.tar.gz
-$ rm sistec_download-master.tar.gz
-$ mv sistec_download-master sistec_download
-$ cd sistec_download
-```
-
-### Instalando o Python3.8
+### Instalando o Python3.9
 
 ```sh
-$ sudo apt install python3.8 python3-pip python3-setuptools python3-wheel virtualenv
+sudo apt install python3.9 python3-pip python3-setuptools python3-wheel virtualenv
 ```
 
 ### Configurando o Virtualenv
 
+- Em Desenvolvimento (com jupyterlab):
 ```sh
-$ /srv/www/sistec_download/config/mkvenv_sistec_download_prod.sh
+/srv/www/sistec_download/config/mkvenv_sistec_download_dev.sh
+```
+
+- Em produção (sem o jupyter):
+```sh
+/srv/www/sistec_download/config/mkvenv_sistec_download_prod.sh
 ```
 
 ### Instalando o Apache2
 
 ```sh
-$ sudo add-apt-repository ppa:ondrej/apache2
-$ sudo apt update
-$ sudo apt install apache2
+sudo apt install apache2
 ```
 
 ### Instalando o mod_wsgi
 
 ```sh
-$ sudo apt install libapache2-mod-wsgi-py3
+sudo apt install libapache2-mod-wsgi-py3
 ```
 
 ### Configurando o Apache2
@@ -121,11 +114,11 @@ como em:
 
 altere a seguinte linha:
 
-> ServerName 192.168.100.7
+> ServerName aguia:8080
 
 para o IP ou hostname de acordo com a sua instituição:
 
-> ServerName ifX.edu.br
+> ServerName ifX.edu.br:80
 
 Depois, altere nos dois aquivos também, a seguinte linha:
 
@@ -135,30 +128,20 @@ para o admin do sistec_download da sua instituição:
 
 > ServerAdmin fulano.beltrano@ifX.edu.br
 
-Depois, em:
-
-``/srv/www/sistec_download/config/001-sistec_download.conf``
-
-altere a seguinte linha:
-
-> WSGIDaemonProcess sistec_download user=ubuntu group=ubuntu python-home=/srv/www/sistec_download/venv/sistec_download_prod
-
-para o "usuario" e "grupo" que executarão o sistema depois da instalação do [Ubuntu Server 20.04.2](#baixe-e-instale-o-ubuntu-server-20042):
-
-> WSGIDaemonProcess sistec_download user=**usuario** group=**grupo** python-home=/srv/www/sistec_download/venv/sistec_download_prod
-
 Agora execute esses comandos:
 
 ```sh
-$ sudo mv /etc/apache2/apache2.conf /etc/apache2/apache2.conf.bak
-$ sudo cp /srv/www/sistec_download/config/apache2.conf /etc/apache2/apache2.conf
-$ sudo mv /etc/apache2/envvars /etc/apache2/envvars.bak
-$ sudo cp /srv/www/sistec_download/config/envvars /etc/apache2/envvars
-$ sudo cp /srv/www/sistec_download/config/001-sistec_download.conf /etc/apache2/sites-available/001-sistec_download.conf
-$ sudo a2enmod wsgi
-$ sudo a2ensite 001-sistec_download.conf
-$ sudo a2dissite 000-default.conf
-$ sudo systemctl restart apache2.service
+sudo mv /etc/apache2/apache2.conf /etc/apache2/apache2.conf.bak
+sudo cp /srv/www/sistec_download/config/apache2.conf /etc/apache2/apache2.conf
+sudo mv /etc/apache2/envvars /etc/apache2/envvars.bak
+sudo cp /srv/www/sistec_download/config/envvars /etc/apache2/envvars
+sudo mv /etc/apache2/ports.conf /etc/apache2/ports.conf.bak
+sudo cp /srv/www/sistec_download/config/ports.conf /etc/apache2/ports.conf
+sudo cp /srv/www/sistec_download/config/001-sistec_download.conf /etc/apache2/sites-available/001-sistec_download.conf
+sudo a2enmod wsgi
+sudo a2ensite 001-sistec_download.conf
+sudo a2dissite 000-default.conf
+sudo systemctl restart apache2.service
 ```
 
 ### Ajustando o Código Fonte
