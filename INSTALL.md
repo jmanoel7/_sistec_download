@@ -70,7 +70,7 @@ cd /srv/www
 git clone https://github.com/jmanoel7/sistec_download.git
 cd sistec_download
 ```
-***OBS:*** logo acima, onde consta SEU_USUARIO, ponha o seu usuário do sistema Debian (que não é o root)
+**OBS:** logo acima, onde consta SEU_USUARIO, ponha o seu usuário do sistema Debian (que não é o root)
 
 ### Instalando o Python3.9
 
