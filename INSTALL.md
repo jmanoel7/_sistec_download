@@ -1,8 +1,8 @@
 1. [Instalação Back-End](#instalação-back-end)
-    1. [Baixe e instale o Debian GNU/Linux Bullseye](#baixe-e-instale-o-debian-gnu-linux-bullseye)
+    1. [Baixe e instale o Debian GNU/Linux Bullseye](#baixe-e-instale-o-debian-gnulinux-bullseye)
     2. [Atualizando o servidor](#atualizando-o-servidor)
     3. [Configurando o locale](#configurando-o-locale)
-    4. [Instalando o git e o curl](#instalando-o-git-e-o-curl)
+    4. [Instalando o git](#instalando-o-git)
     5. [Baixando o sistec_download](#baixando-o-sistec_download)
     6. [Instalando o Python3.8](#instalando-o-python38)
     7. [Configurando o Virtualenv](#configurando-o-virtualenv)
@@ -53,10 +53,10 @@ sudo locale-gen
 sudo update-locale LANG="pt_BR.UTF-8" LANGUAGE="pt_BR:en_US"
 ```
 
-### Instalando o git e o curl
+### Instalando o git
 
 ```sh
-sudo apt install git curl
+sudo apt install git
 ```
 
 ### Baixando o sistec_download
@@ -85,7 +85,7 @@ sudo apt install python3.9 python3-pip python3-setuptools python3-wheel virtuale
 /srv/www/sistec_download/config/mkvenv_sistec_download_dev.sh
 ```
 
-- Em produção (sem o jupyter):
+- Em produção (sem o jupyterlab):
 ```sh
 /srv/www/sistec_download/config/mkvenv_sistec_download_prod.sh
 ```
