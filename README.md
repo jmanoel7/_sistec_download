@@ -1,4 +1,4 @@
-# sistec-download
+# sistec_download
 
 Baixa as planilhas do SISTEC automaticamente para fins de cruzamento de dados com o Q-Acadêmico
 
