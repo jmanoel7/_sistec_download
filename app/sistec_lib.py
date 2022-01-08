@@ -16,17 +16,17 @@ headers = {}
 host_sistec = 'https://sistec.mec.gov.br'
 encoding = 'iso-8859-1'
 campus_encoding = 'utf-8'
-logDir = u'%s' % getenv('SISTEC_DOWNLOAD_LOG', default='../log')
-pydbg_path = u'%s/pycurl_debug_%s.log' % (logDir, strftime('%Y-%m-%d'))
+log_dir = u'%s' % getenv('SISTEC_DOWNLOAD_LOG', default='../log')
+pydbg_path = u'%s/pycurl_debug_%s.log' % (log_dir, strftime('%Y-%m-%d'))
 
 
-def get_data_sistec(cod_campus, campus, perfil, tipos, downDir, qtdPerfis, cookies, file_log_path=None, level_debug=[False, False, False]):
+def get_data_sistec(cod_campus, campus, perfil, tipos, download_dir, qtde_perfis, cookies, file_log_path=None, level_debug=[False, False, False]):
     global host_sistec, encoding, campus_encoding
     sucesso = False
     campus = campus.decode(campus_encoding)
-    campus_csv = path.join(downDir, campus + '.csv')
+    campus_csv = path.join(download_dir, campus + '.csv')
     file_csv = open(campus_csv, mode='w', encoding=encoding)
-    sucesso, mensagem = write_csv(file_csv, campus, cod_campus, perfil, qtdPerfis, tipos, cookies, file_log_path, level_debug)
+    sucesso, mensagem = write_csv(file_csv, campus, cod_campus, perfil, qtde_perfis, tipos, cookies, file_log_path, level_debug)
     file_csv.close()
     if sucesso:
         if level_debug[0]:
@@ -47,7 +47,7 @@ def get_data_sistec(cod_campus, campus, perfil, tipos, downDir, qtdPerfis, cooki
     return sucesso
 
 
-def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies, file_log_path = None, level_debug = [False, False, False]):
+def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, tipos, cookies, file_log_path = None, level_debug = [False, False, False]):
     u"""
     Percorre o sistec, pegando os dados dos alunos nos ciclos de matricula,
     do 'campus' e os salva no arquivo 'file_csv'.
@@ -93,10 +93,6 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
     cookie_perfil = u'perfil_cookie=' + perfil
     cookie_usuario = u'co_usuario=' + co_campus
 
-    tipo_presencial = tipos[0]
-    tipo_ead = tipos[1]
-    tipo_fic = tipos[2]
-
     turmas_json = path.join(getenv('SISTEC_DOWNLOAD_APP', default=path.curdir), '_turmas.json')
     alunos_json = path.join(getenv('SISTEC_DOWNLOAD_APP', default=path.curdir), '_alunos.json')
 
@@ -113,18 +109,17 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
     # 47: CO_PESSOA                 # 48: CO_CARGO                     # 49: DS_ORGAO_EXPEDIDOR       # 50: SG_UF_ORG_EXPED
     # 51: DS_CARGO                  # 52: CO_UNIDADE_ENSINO_IMPORTACAO # 53: CO_MATRICULA_RESPONSAVEL # 54: NO_SOCIAL
     # USAREMOS AS SEGUINTES COLUNAS:
-    # 02; 05; 12; 14; 15; 18; 20; 31; 41
+    # 02; 05; 10; 41; 18; 14; 16
 
     file_csv.write('NO_ALUNO;'
                    'NU_CPF;'
-                   'CO_CURSO;'
-                   'DT_DATA_INICIO;'
-                   'DT_DATA_FIM_PREVISTO;'
+                   'CO_CICLO_MATRICULA;'
+                   'NO_STATUS_MATRICULA;'
                    'NO_CICLO_MATRICULA;'
-                   'CO_TIPO_OFERTA_CURSO;'
-                   'CO_POLO;'
-                   'NO_STATUS_MATRICULA'
+                   'DT_DATA_INICIO;'
+                   'CO_UNIDADE_ENSINO'
                    '\n')
+
     file_csv.flush()
     fsync(file_csv.fileno())
 
@@ -148,7 +143,7 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
         -H 'Sec-Fetch-Mode: navigate'
         -H 'Sec-Fetch-Site: same-origin'
         -H 'Sec-Fetch-User: ?1'
-        --data-raw 'tipo=1660670&acao=&qtdPerfis=14'
+        --data-raw 'tipo=1660670&acao=&qtde_perfis=14'
     """
 
     if level_debug[0]:
@@ -179,7 +174,7 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
     post_data = {
         'tipo': co_campus,
         'acao': '',
-        'qtdPerfis': str(qtdPerfis)
+        'qtdPerfis': str(qtde_perfis)
     }
     postfields = urlencode(post_data)
     buff = BytesIO()
@@ -384,9 +379,6 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
             # PEGA O TIPO DE CURSO:
             tipo_curso = ciclos[i]['Tipo do Curso']
 
-            # PEGA O NOME DO CURSO:
-            nome_curso = ciclos[i]['Nome do Ciclo']
-
             # VERIFICA SE CURSO EH DO TIPO FIC:
             re_fic = re.compile(u'^.*FORMA[CÇ][AÃ]O\s*(INICIAL|CONTINUADA).*$')
             match_fic = re_fic.search(tipo_curso)
@@ -395,67 +387,32 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
             re_mm = re.compile(u'^.*MULHERES\s*MIL.*$')
             match_mm = re_mm.search(tipo_curso)
 
-            # VERIFICA SE CURSO EH DO TIPO EAD:
-            re_ead = re.compile(u'^.*\s*DIST[AÂ]NCIA\s*$')
-            match_ead = re_ead.search(nome_curso)
-
-            # VERIFICA SE CURSO EH DO TIPO PRESENCIAL:
-            re_presencial = re.compile(u'^.*\s*PRESENCIAL\s*$')
-            match_presencial = re_presencial.search(nome_curso)
-
-            # PEGA OS DADOS DO CURSO:
-            dados_curso = ciclos[i]['Alunos']['eventos']['click']
-            if level_debug[1]:
-                with open(file_log_path, 'a') as file_log:
-                    file_log.write(u'%s dados_curso:\t%s\n' % (
-                        strftime('[%Y-%m-%d %H:%M:%S]'), dados_curso))
-                    file_log.flush()
-                    fsync(file_log.fileno())
-
-            # PEGA O CODIGO DO CURSO:
-            match = re.search(r'^.*selecionados.*\"curso\":(\d+).*$', dados_curso)
-            if not match:
-                return (False, u"não foi possível determinar o código do curso:\t%s" % dados_curso)
-            co_curso = match.group(1).strip()
-            if level_debug[1]:
-                with open(file_log_path, 'a') as file_log:
-                    file_log.write(u'%s co_curso:\t%s\n' % (
-                        strftime('[%Y-%m-%d %H:%M:%S]'), co_curso))
-                    file_log.flush()
-                    fsync(file_log.fileno())
-
-            if match_fic:
-                if not tipo_fic:
-                    continue
-            elif match_mm:
-                if not tipo_fic:
-                    continue
-            elif match_ead:
-                co_cursos = [338565, 338569, 338571, 338572, 338573, 338574, 338575,
-                    338578, 338580, 338581, 338582, 338583, 362343, 362344, 362345, 362346, 362347]
-                if (tipo_presencial and int(co_curso) in co_cursos) or (tipo_ead and int(co_curso) not in co_cursos):
-                    pass
-                else:
-                    continue
-            elif match_presencial:
-                if not tipo_presencial:
-                    continue
-            else:
+            if match_fic or match_mm:
                 continue
-                # return (
-                #    False, u"não foi possível determinar o tipo do curso:\t%s" % nome_curso
-                # )
 
-            # PEGA O CODIGO DO CICLO:
-            co_ciclo = ciclos[i]['Alunos']['id']
-            match = re.search(r'^.*acao_(\d+).*$', co_ciclo)
+            # PEGA O CODIGO DA UNIDADE DE ENSINO:
+            co_unidade_ensino = ciclos[i]['Alunos']['eventos']['click']
+            match = re.search(r'^.*\"instituicao\":(\d+).*$', co_unidade_ensino)
             if not match:
-                return (False, u"não foi possível determinar o código do ciclo:\t%s" % co_ciclo)
-            co_ciclo = match.group(1)
+                return (False, u"não foi possível determinar o código da unidade de ensino:\t%s" % co_unidade_ensino)
+            co_unidade_ensino = match.group(1)
             if level_debug[1]:
                 with open(file_log_path, 'a') as file_log:
-                    file_log.write(u'%s co_ciclo:\t%s\n' % (
-                        strftime('[%Y-%m-%d %H:%M:%S]'), co_ciclo))
+                    file_log.write(u'%s co_unidade_ensino:\t%s\n' % (
+                        strftime('[%Y-%m-%d %H:%M:%S]'), co_unidade_ensino))
+                    file_log.flush()
+                    fsync(file_log.fileno())
+
+            # PEGA O CODIGO DO CICLO DE MATRICULA:
+            co_ciclo_matricula = ciclos[i]['Alunos']['id']
+            match = re.search(r'^.*acao_(\d+).*$', co_ciclo_matricula)
+            if not match:
+                return (False, u"não foi possível determinar o código do ciclo:\t%s" % co_ciclo_matricula)
+            co_ciclo_matricula = match.group(1)
+            if level_debug[1]:
+                with open(file_log_path, 'a') as file_log:
+                    file_log.write(u'%s co_ciclo_matricula:\t%s\n' % (
+                        strftime('[%Y-%m-%d %H:%M:%S]'), co_ciclo_matricula))
                     file_log.flush()
                     fsync(file_log.fileno())
 
@@ -468,18 +425,15 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
                     file_log.flush()
                     fsync(file_log.fileno())
 
-            # PEGA AS DATAS DO INICO E DO FIM PREVISTO:
-            match = re.search(r'^.*(\d{2}/\d{2}/\d{4})[^0-9]+(\d{2}/\d{2}/\d{4}).*$', periodo_ciclo)
+            # PEGA A DATA DO INICO:
+            match = re.search(r'^.*(\d{2}/\d{2}/\d{4}).*$', periodo_ciclo)
             if not match:
-                return (False, u"não foi possível determinar as datas do início/fim previsto:\t%s" % periodo_ciclo)
+                return (False, u"não foi possível determinar a data do início:\t%s" % periodo_ciclo)
             dt_data_inicio = match.group(1).strip()
-            dt_data_fim_previsto = match.group(2).strip()
             if level_debug[1]:
                 with open(file_log_path, 'a') as file_log:
                     file_log.write(u'%s dt_data_inicio:\t%s\n' % (
                         strftime('[%Y-%m-%d %H:%M:%S]'), dt_data_inicio))
-                    file_log.write(u'%s dt_data_fim_previsto:\t%s\n' % (
-                        strftime('[%Y-%m-%d %H:%M:%S]'), dt_data_fim_previsto))
                     file_log.flush()
                     fsync(file_log.fileno())
 
@@ -493,39 +447,11 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
                     file_log.flush()
                     fsync(file_log.fileno())
 
-            # PEGA O CODIGO DO TIPO DA OFERTA DO CURSO:
-            match = re.search(r'^.*selecionados.*\"tipoOferta\":(\d+).*$', dados_curso)
-            if match:
-                co_tipo_oferta_curso = match.group(1).strip()
-            else:
-                co_tipo_oferta_curso = u''
-            if level_debug[1]:
-                with open(file_log_path, 'a') as file_log:
-                    file_log.write(u'%s co_tipo_oferta_curso:\t%s\n' % (
-                        strftime('[%Y-%m-%d %H:%M:%S]'), co_tipo_oferta_curso))
-                    file_log.flush()
-                    fsync(file_log.fileno())
-
-            # PEGA O CODIGO DO POLO DO CURSO:
-            match = re.search(r'^.*POLO:\s*(\d+).*$', no_ciclo_matricula)
-            if match:
-                co_polo = match.group(1).strip()
-            else:
-                co_polo = u''
-            if level_debug[1]:
-                with open(file_log_path, 'a') as file_log:
-                    file_log.write(u'%s co_polo:\t%s\n' % (
-                        strftime('[%Y-%m-%d %H:%M:%S]'), co_polo))
-                    file_log.flush()
-                    fsync(file_log.fileno())
-
             line_common = []
-            line_common.append(co_curso + u';')
-            line_common.append(dt_data_inicio + u';')
-            line_common.append(dt_data_fim_previsto + u';')
+            line_common.append(co_ciclo_matricula + u';')
             line_common.append(no_ciclo_matricula + u';')
-            line_common.append(co_tipo_oferta_curso + u';')
-            line_common.append(co_polo + u';')
+            line_common.append(dt_data_inicio + u';')
+            line_common.append(co_unidade_ensino + u';')
 
             continue_alunos = 0
             pagina_alunos = 1
@@ -567,7 +493,7 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
                         file_log.flush()
                         fsync(file_log.fileno())
                 headers = {}
-                url_ciclo = url_ciclo_common + co_ciclo + '/coaluno/'
+                url_ciclo = url_ciclo_common + co_ciclo_matricula + '/coaluno/'
                 http_header = [
                     header_user_agent,
                     header_accept_json,
@@ -684,14 +610,13 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
                             file_log.flush()
                             fsync(file_log.fileno())
                     status_aluno = status_aluno.strip()
-                    line.append(status_aluno)
+                    line.insert(3, status_aluno)
 
                     # ADICIONA UMA LINHA DA PLANILHA NO ARRAY "lines":
                     line.append(u'\n')
                     line = u''.join(line)
                     line = limpa_linha(line, encoding)
-                    if line not in lines:
-                        lines.append(line)
+                    lines.append(line)
 
                 try:
                     total_paginas_alunos = alunos_data['totalPaginas']

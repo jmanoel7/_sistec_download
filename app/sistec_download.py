@@ -15,6 +15,7 @@ from sistec_lib import get_data_sistec
 # CONFIG GERAL: INICIO
 campus_encoding = 'utf-8'
 # CONFIG GERAL: FIM
+
 # CONFIG DEBUG: INICIO
 logDir = u'%s' % getenv('SISTEC_DOWNLOAD_LOG', default='../log')
 if not path.exists(logDir):
@@ -35,103 +36,55 @@ except PermissionError:
 file_debug.close()
 level_debug = [True, False, False]
 # CONFIG DEBUG: FIM
-# CONFIG PLANILHAS PRESENCIAIS: INICIO
-downPRE_Dir = u'%s' % getenv('SISTEC_DOWNLOAD_PLANILHAS_PRESENCIAL', default='../planilhas/presencial')
-if not path.exists(downPRE_Dir):
+
+# CONFIG PLANILHAS: INICIO
+download_dir = u'%s' % getenv('SISTEC_DOWNLOAD_PLANILHAS', default='../planilhas')
+if not path.exists(download_dir):
     try:
-        makedirs(downPRE_Dir)
+        makedirs(download_dir)
     except PermissionError:
-        if downPRE_Dir[0] == '/':
-            print('Sem permissão de escrita no diretório de download de planilhas de cursos presenciais:\n%s' % downPRE_Dir)
+        if download_dir[0] == '/':
+            print('Sem permissão de escrita no diretório de download de planilhas de cursos presenciais:\n%s' % download_dir)
         else:
-            print('Sem permissão de escrita no diretório de download de planilhas de cursos presenciais:\n%s' % path.join(os.getcwd(), downPRE_Dir))
+            print('Sem permissão de escrita no diretório de download de planilhas de cursos presenciais:\n%s' % path.join(os.getcwd(), download_dir))
         os._exit(1)
-file_temp_path = u'%s/temp.txt' % downPRE_Dir
+file_temp_path = u'%s/temp.txt' % download_dir
 try:
     file_temp = open(file_temp_path, 'w')
 except PermissionError:
-    if downPRE_Dir[0] == '/':
-        print('Sem permissão de escrita no diretório de download de planilhas de cursos presenciais:\n%s' % downPRE_Dir)
+    if download_dir[0] == '/':
+        print('Sem permissão de escrita no diretório de download de planilhas de cursos presenciais:\n%s' % download_dir)
     else:
-        print('Sem permissão de escrita no diretório de download de planilhas de cursos presenciais:\n%s' % path.join(os.getcwd(), downPRE_Dir))
+        print('Sem permissão de escrita no diretório de download de planilhas de cursos presenciais:\n%s' % path.join(os.getcwd(), download_dir))
     os._exit(1)
 file_temp.close()
 os.remove(file_temp_path)
-# CONFIG PLANILHAS PRESENCIAIS: FIM
-# CONFIG PLANILHAS EAD: INICIO
-downEAD_Dir = u'%s' % getenv('SISTEC_DOWNLOAD_PLANILHAS_EAD', default='../planilhas/ead')
-if not path.exists(downEAD_Dir):
-    try:
-        makedirs(downEAD_Dir)
-    except PermissionError:
-        if downEAD_Dir[0] == '/':
-            print('Sem permissão de escrita no diretório de download de planilhas de cursos EaD:\n%s' % downEAD_Dir)
-        else:
-            print('Sem permissão de escrita no diretório de download de planilhas de cursos EaD:\n%s' % path.join(os.getcwd(), downEAD_Dir))
-        os._exit(1)
-file_temp_path = u'%s/temp.txt' % downEAD_Dir
-try:
-    file_temp = open(file_temp_path, 'w')
-except PermissionError:
-    if downEAD_Dir[0] == '/':
-        print('Sem permissão de escrita no diretório de download de planilhas de cursos EaD:\n%s' % downEAD_Dir)
-    else:
-        print('Sem permissão de escrita no diretório de download de planilhas de cursos EaD:\n%s' % path.join(os.getcwd(), downEAD_Dir))
-    os._exit(1)
-file_temp.close()
-os.remove(file_temp_path)
-# CONFIG PLANILHAS EAD: FIM
-# CONFIG PLANILHAS FIC: INICIO
-downFIC_Dir = u'%s' % getenv('SISTEC_DOWNLOAD_PLANILHAS_FIC', default='../planilhas/fic')
-if not path.exists(downFIC_Dir):
-    try:
-        makedirs(downFIC_Dir)
-    except PermissionError:
-        if downFIC_Dir[0] == '/':
-            print('Sem permissão de escrita no diretório de download de planilhas de cursos FIC:\n%s' % downFIC_Dir)
-        else:
-            print('Sem permissão de escrita no diretório de download de planilhas de cursos FIC:\n%s' % path.join(os.getcwd(), downFIC_Dir))
-        os._exit(1)
-file_temp_path = u'%s/temp.txt' % downFIC_Dir
-try:
-    file_temp = open(file_temp_path, 'w')
-except PermissionError:
-    if downFIC_Dir[0] == '/':
-        print('Sem permissão de escrita no diretório de download de planilhas de cursos FIC:\n%s' % downFIC_Dir)
-    else:
-        print('Sem permissão de escrita no diretório de download de planilhas de cursos FIC:\n%s' % path.join(os.getcwd(), downFIC_Dir))
-    os._exit(1)
-file_temp.close()
-os.remove(file_temp_path)
-# CONFIG PLANILHAS FIC: FIM
+# CONFIG PLANILHAS: FIM
+
 # CONFIG UPLOAD DIR: INICIO
-uploadDir = u'%s/' % getenv('SISTEC_DOWNLOAD_COOKIES', default='../upload')
-if not path.exists(uploadDir):
+upload_dir = u'%s/' % getenv('SISTEC_DOWNLOAD_COOKIES', default='../upload')
+if not path.exists(upload_dir):
     try:
-        makedirs(uploadDir)
+        makedirs(upload_dir)
     except PermissionError:
-        if uploadDir[0] == '/':
-            print('Sem permissão de escrita no diretório de upload:\n%s' % uploadDir)
+        if upload_dir[0] == '/':
+            print('Sem permissão de escrita no diretório de upload:\n%s' % upload_dir)
         else:
-            print('Sem permissão de escrita no diretório de upload:\n%s' % path.join(os.getcwd(), uploadDir))
+            print('Sem permissão de escrita no diretório de upload:\n%s' % path.join(os.getcwd(), upload_dir))
         os._exit(1)
-file_temp_path = u'%s/temp.txt' % uploadDir
+file_temp_path = u'%s/temp.txt' % upload_dir
 try:
     file_temp = open(file_temp_path, 'w')
 except PermissionError:
-    if uploadDir[0] == '/':
-        print('Sem permissão de escrita no diretório de upload:\n%s' % uploadDir)
+    if upload_dir[0] == '/':
+        print('Sem permissão de escrita no diretório de upload:\n%s' % upload_dir)
     else:
-        print('Sem permissão de escrita no diretório de upload:\n%s' % path.join(os.getcwd(), uploadDir))
+        print('Sem permissão de escrita no diretório de upload:\n%s' % path.join(os.getcwd(), upload_dir))
     os._exit(1)
 file_temp.close()
 os.remove(file_temp_path)
 # CONFIG UPLOAD DIR: FIM
-# CONFIG TIPOS DE CURSOS: INICIO
-# Presencial, EaD, FIC
-tipos = [True, True, True]
-downloadsDir = [downPRE_Dir, downEAD_Dir, downFIC_Dir]
-# CONFIG TIPOS DE CURSOS: FIM
+
 # CONFIG APP FLASK: INICIO
 app = Flask(__name__)
 app.secret_key = b'DTAT124154%*dtcl240580+='
@@ -147,25 +100,28 @@ def index():
 # app login
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    global campus_encoding, file_debug_path, level_debug, uploadDir, tipos, downloadsDir
+    global campus_encoding, file_debug_path, level_debug, upload_dir, download_dir
     error = None
     if request.method == 'POST':
+
         # CONFIG FILE COOKIES: INICIO
         cookies = request.files['cookies_json']
-        cookies_filename = uploadDir + secure_filename(cookies.filename)
+        cookies_filename = upload_dir + secure_filename(cookies.filename)
         try:
             cookies.save(cookies_filename)
         except IsADirectoryError:
             return render_template('upload.html', error='ERRO: O arquivo cookies.json não foi informado !!!')
         # CONFIG FILE COOKIES: FIM
+
         # CONFIG FILE SISTEC: INICIO
         sistec = request.files['sistec_html']
-        sistec_filename = uploadDir + secure_filename(sistec.filename)
+        sistec_filename = upload_dir + secure_filename(sistec.filename)
         try:
             sistec.save(sistec_filename)
         except IsADirectoryError:
             return render_template('upload.html', error='ERRO: O arquivo sistec.html não foi informado !!!')
         # CONFIG FILE SISTEC: FIM
+
         # CONFIG DADOS COOKIES: INICIO
         try:
             file_json = open(cookies_filename, 'r')
@@ -190,6 +146,7 @@ def login():
         cookies.append(cookie_phpsessid)
         cookies.append(cookie_noticias)
         # CONFIG DADOS COOKIES: FIM
+
         # CONFIG DADOS SISTEC: INICIO
         campi = {}
         try:
@@ -204,12 +161,14 @@ def login():
                     campus = u'CÂMPUS ' + re.sub(r'^.*<option\s+title=[\"\'].+\s+CAMPUS\s+([A-ZÁÃÂÉẼÊÍĨÎÓÕÔÚŨÛÇ\s]+)[\"\'].*$', r'\1', line)
                     campus = re.sub(r'\s+$', r'', campus)
                     campus = campus.encode(campus_encoding)
+
                     # AJUSTES PARA O IFG: INICIO
                     if campus == u'CÂMPUS ÁGUAS LINDAS DE GOIÁS'.encode(campus_encoding):
                         campus = u'CÂMPUS ÁGUAS LINDAS'.encode(campus_encoding)
                     if campus == u'CÂMPUS VALPARAÍSO DE GOIÁS'.encode(campus_encoding):
                         campus = u'CÂMPUS VALPARAÍSO'.encode(campus_encoding)
                     # AJUSTES PARA O IFG: FIM
+
                     if campus not in campus_list:
                         campus_list.append(campus)
                         baixar = True
@@ -228,26 +187,24 @@ def login():
             return render_template('upload.html', error='ERRO: Sem permissão de leitura do arquivo sistec.html !!!')
         if len(campi) == 0:
             return render_template('upload.html', error='ERRO: O arquivo sistec.html não contêm nenhum câmpus !!!')
+
         # ORDENACAO DO DICIONARIO CAMPI
         campi = {key: value for key, value in sorted(campi.items(), key=lambda item: item[1][1])}
+
         # CONFIG DADOS SISTEC: FIM
-        session['presencial'] = []
-        session['presencial'].append(tipos[0])
-        session['presencial'].append(downloadsDir[0])
-        session['presencial'].append(campi)
-        session['ead'] = []
-        session['ead'].append(tipos[1])
-        session['ead'].append(downloadsDir[1])
-        session['ead'].append(campi)
-        session['fic'] = []
-        session['fic'].append(tipos[2])
-        session['fic'].append(downloadsDir[2])
-        session['fic'].append(campi)
+
+        # REGISTRANDO INFORMAÇÕES DE SESSÃO: INÍCIO
+        session['planilhas'] = []
+        session['planilhas'].append(download_dir)
+        session['planilhas'].append(campi)
         session['cookies'] = cookies
         session['file_debug_path'] = file_debug_path
         session['level_debug'] = level_debug
         session.modified = True
+        # REGISTRANDO INFORMAÇÕES DE SESSÃO: FIM
+
         return redirect(url_for('download'))
+
     # o código abaixo é executado se o método request
     # foi GET ou se as informações são inválidas
     return render_template('upload.html', error=error)
@@ -258,231 +215,37 @@ def login():
 def download():
     error = None
     if request.method == 'POST':
-        # Atualizar os dados de sessao referentes a cursos presenciais
-        try:
-            campi_presencial = request.form['campi_presencial']
-        except KeyError:
-            campi_presencial = False
-        if campi_presencial == '1':
-            campi_presencial = True
-        else:
-            campi_presencial = False
-        session['presencial'][0] = campi_presencial
-        for i in session['presencial'][2].items():
-            key = i[0]
-            try:
-                baixar = request.form['pre_' + key + i[1][0]]
-            except KeyError:
-                baixar = False
-            if baixar == '1':
-                baixar = True
-            else:
-                baixar = False
-            tupla = (i[1][0], i[1][1], i[1][2], baixar)
-            session['presencial'][2][key] = tupla
-        # Atualizar os dados de sessao referentes a cursos ead
-        try:
-            campi_ead = request.form['campi_ead']
-        except KeyError:
-            campi_ead = False
-        if campi_ead == '1':
-            campi_ead = True
-        else:
-            campi_ead = False
-        session['ead'][0] = campi_ead
-        for i in session['ead'][2].items():
-            key = i[0]
-            try:
-                baixar = request.form['ead_' + key + i[1][0]]
-            except KeyError:
-                baixar = False
-            if baixar == '1':
-                baixar = True
-            else:
-                baixar = False
-            tupla = (i[1][0], i[1][1], i[1][2], baixar)
-            session['ead'][2][key] = tupla
-        # Atualizar os dados de sessao referentes a cursos fic
-        try:
-            campi_fic = request.form['campi_fic']
-        except KeyError:
-            campi_fic = False
-        if campi_fic == '1':
-            campi_fic = True
-        else:
-            campi_fic = False
-        session['fic'][0] = campi_fic
-        for i in session['fic'][2].items():
-            key = i[0]
-            try:
-                baixar = request.form['fic_' + key + i[1][0]]
-            except KeyError:
-                baixar = False
-            if baixar == '1':
-                baixar = True
-            else:
-                baixar = False
-            tupla = (i[1][0], i[1][1], i[1][2], baixar)
-            session['fic'][2][key] = tupla
-        session.modified = True
-        # VERIFICA SE TEM PELO MENOS UM TIPO DE CURSO MARCADO
-        if (not session['presencial'][0]) and (not session['ead'][0]) and (not session['fic'][0]):
-            return render_template('download.html', presencial=session['presencial'], ead=session['ead'], fic=session['fic'],
-                error = u'ERRO: É para escolher ao menos um tipo de curso (presencial/ead/fic) !!!')
         # VERIFICA SE TEM PELO MENOS UM CAMPUS MARCADO
         total_falso = True
-        for i in session['presencial'][2].items():
+        for i in session['planilhas'][1].items():
             # se flag de baixar eh ativo
             if i[1][3]:
                 total_falso = False
                 break
         if total_falso:
-            for i in session['ead'][2].items():
-                # se flag de baixar eh ativo
-                if i[1][3]:
-                    total_falso = False
-                    break
-        if total_falso:
-            for i in session['fic'][2].items():
-                # se flag de baixar eh ativo
-                if i[1][3]:
-                    total_falso = False
-                    break
-        if total_falso:
-            return render_template('download.html', presencial=session['presencial'], ead=session['ead'], fic=session['fic'],
-                error = u'ERRO: É para escolher ao menos um câmpus de um tipo de curso (presencial/ead/fic) !!!')
-        # VERIFICA CURSOS PRESENCIAIS
-        if session['presencial'][0]:
-            campus_list = []
-            for i in session['presencial'][2].items():
-                tupla = (i[1][1], i[1][3])
-                if tupla not in campus_list:
-                    campus_list.append(tupla)
-                elif i[1][3]:
-                    return render_template('download.html', presencial=session['presencial'], ead=session['ead'], fic=session['fic'],
-                        error=u'ERRO: NÃO se deve escolher dois ou mais perfis de um mesmo câmpus !!!')
-            total_falso = True
-            for i in session['presencial'][2].items():
-                # se flag de baixar eh ativo
-                if i[1][3]:
-                    total_falso = False
-                    break
-            if total_falso:
-                return render_template('download.html', presencial=session['presencial'], ead=session['ead'], fic=session['fic'],
-                    error = u'ERRO: É para escolher ao menos um Câmpus para os cursos presenciais !!!')
-        else:
-            total_falso = True
-            for i in session['presencial'][2].items():
-                # se flag de baixar eh ativo
-                if i[1][3]:
-                    total_falso = False
-                    break
-            if not total_falso:
-                return render_template('download.html', presencial=session['presencial'], ead=session['ead'], fic=session['fic'],
-                    error = u'ERRO: Tem Câmpus marcado para os cursos presenciais, sendo que não está marcado a opção de cursos presenciais !!!')
-        # VERIFICA CURSOS EAD
-        if session['ead'][0]:
-            campus_list = []
-            for i in session['ead'][2].items():
-                tupla = (i[1][1], i[1][3])
-                if tupla not in campus_list:
-                    campus_list.append(tupla)
-                elif i[1][3]:
-                    return render_template('download.html', presencial=session['presencial'], ead=session['ead'], fic=session['fic'],
-                        error=u'ERRO: NÃO se deve escolher dois ou mais perfis de um mesmo câmpus !!!')
-            total_falso = True
-            for i in session['ead'][2].items():
-                # se flag de baixar eh ativo
-                if i[1][3]:
-                    total_falso = False
-                    break
-            if total_falso:
-                return render_template('download.html', presencial=session['presencial'], ead=session['ead'], fic=session['fic'],
-                    error = u'ERRO: É para escolher ao menos um Câmpus para os cursos EaD !!!')
-        else:
-            total_falso = True
-            for i in session['ead'][2].items():
-                # se flag de baixar eh ativo
-                if i[1][3]:
-                    total_falso = False
-                    break
-            if not total_falso:
-                return render_template('download.html', presencial=session['presencial'], ead=session['ead'], fic=session['fic'],
-                    error = u'ERRO: Tem Câmpus marcado para os cursos EaD, sendo que não está marcado a opção de cursos EaD !!!')
-        # VERIFICA CURSOS FIC
-        if session['fic'][0]:
-            campus_list = []
-            for i in session['fic'][2].items():
-                tupla = (i[1][1], i[1][3])
-                if tupla not in campus_list:
-                    campus_list.append(tupla)
-                elif i[1][3]:
-                    return render_template('download.html', presencial=session['presencial'], ead=session['ead'], fic=session['fic'],
-                        error=u'ERRO: NÃO se deve escolher dois ou mais perfis de um mesmo câmpus !!!')
-            total_falso = True
-            for i in session['fic'][2].items():
-                # se flag de baixar eh ativo
-                if i[1][3]:
-                    total_falso = False
-                    break
-            if total_falso:
-                return render_template('download.html', presencial=session['presencial'], ead=session['ead'], fic=session['fic'],
-                    error = u'ERRO: É para escolher ao menos um Câmpus para os cursos FIC !!!')
-        else:
-            total_falso = True
-            for i in session['fic'][2].items():
-                # se flag de baixar eh ativo
-                if i[1][3]:
-                    total_falso = False
-                    break
-            if not total_falso:
-                return render_template('download.html', presencial=session['presencial'], ead=session['ead'], fic=session['fic'],
-                    error = u'ERRO: Tem Câmpus marcado para os cursos FIC, sendo que não está marcado a opção de cursos FIC !!!')
-        # CONFIGURAR VARIAVEIS PARA BAIXAR
-        cookies = session['cookies']
-        file_debug_path = session['file_debug_path']
-        level_debug = session['level_debug']
-        # BAIXAR PLANILHAS PRESENCIAIS: INICIO
-        if session['presencial'][0]:
-            tipos = [session['presencial'][0], False, False]
-            downDir = session['presencial'][1]
-            qtdPerfis = len(session['presencial'][2])
-            for i in session['presencial'][2].items():
-                baixar = i[1][3]
-                if baixar:
-                    cod_campus = i[1][0]
-                    campus = i[1][1]
-                    perfil = re.sub(r' ', r'+', i[1][2])
-                    get_data_sistec(cod_campus, campus, perfil, tipos, downDir, qtdPerfis, cookies, file_debug_path, level_debug)
-        # BAIXAR PLANILHAS PRESENCIAIS: FIM
-        # BAIXAR PLANILHAS EAD: INICIO
-        if session['ead'][0]:
-            tipos = [False, session['ead'][0], False]
-            downDir = session['ead'][1]
-            qtdPerfis = len(session['ead'][2])
-            for i in session['ead'][2].items():
-                baixar = i[1][3]
-                if baixar:
-                    cod_campus = i[1][0]
-                    campus = i[1][1]
-                    perfil = re.sub(r' ', r'+', i[1][2])
-                    get_data_sistec(cod_campus, campus, perfil, tipos, downDir, qtdPerfis, cookies, file_debug_path, level_debug)
-        # BAIXAR PLANILHAS EAD: FIM
-        # BAIXAR PLANILHAS FIC: INICIO
-        if session['fic'][0]:
-            tipos = [False, False, session['fic'][0]]
-            downDir = session['fic'][1]
-            qtdPerfis = len(session['fic'][2])
-            for i in session['fic'][2].items():
-                baixar = i[1][3]
-                if baixar:
-                    cod_campus = i[1][0]
-                    campus = i[1][1]
-                    perfil = re.sub(r' ', r'+', i[1][2])
-                    get_data_sistec(cod_campus, campus, perfil, tipos, downDir, qtdPerfis, cookies, file_debug_path, level_debug)
-        # BAIXAR PLANILHAS FIC: FIM
+            return render_template('download.html', planilhas=session['planilhas'], error = u'ERRO: É para escolher ao menos um Câmpus !!!')
+        # VERIFICA SE TEM MAIS DE UM PERFIL ESCOLHIDO PARA O MESMO CAMPUS
+        campus_list = []
+        for i in session['planilhas'][1].items():
+            tupla = (i[1][1], i[1][3])
+            if tupla not in campus_list:
+                campus_list.append(tupla)
+            elif i[1][3]:
+                return render_template('download.html', planilhas=session['planilhas'], error=u'ERRO: NÃO se deve escolher dois ou mais perfis de um mesmo Câmpus !!!')
+        # BAIXAR PLANILHAS: INICIO
+        download_dir = session['planilhas'][0]
+        qtde_perfis = len(session['planilhas'][1])
+        for i in session['planilhas'][1].items():
+            baixar = i[1][3]
+            if baixar:
+                cookies = session['cookies']
+                cod_campus = i[1][0]
+                campus = i[1][1]
+                perfil = re.sub(r' ', r'+', i[1][2])
+                get_data_sistec(cod_campus, campus, perfil, download_dir, qtde_perfis, cookies, file_debug_path, level_debug)
+        # BAIXAR PLANILHAS: FIM
         return redirect(url_for('planilhas'))
-    return render_template('download.html', presencial=session['presencial'], ead=session['ead'], fic=session['fic'], error=error)
+    return render_template('download.html', planilhas=session['planilhas'], error=error)
 
 
 # app planilhas
@@ -490,40 +253,19 @@ def download():
 def planilhas():
     global campus_encoding
     campi = {}
-    if session['presencial'][0]:
-        campi['presencial'] = []
-        for i in session['presencial'][2].items():
-            # se flag de baixar eh ativo
-            if i[1][3]:
-                campi['presencial'].append({'caption': i[1][1].decode(campus_encoding), 'href': url_for('download_csv', tipo='presencial', planilha=i[1][1].decode(campus_encoding))})
-    if session['ead'][0]:
-        campi['ead'] = []
-        for i in session['ead'][2].items():
-            # se flag de baixar eh ativo
-            if i[1][3]:
-                campi['ead'].append({'caption': i[1][1].decode(campus_encoding), 'href': url_for('download_csv', tipo='ead', planilha=i[1][1].decode(campus_encoding))})
-    if session['fic'][0]:
-        campi['fic'] = []
-        for i in session['fic'][2].items():
-            # se flag de baixar eh ativo
-            if i[1][3]:
-                campi['fic'].append({'caption': i[1][1].decode(campus_encoding), 'href': url_for('download_csv', tipo='fic', planilha=i[1][1].decode(campus_encoding))})
+    campi['planilhas'] = []
+    for i in session['planilhas'][1].items():
+        # se flag de baixar eh ativo
+        if i[1][3]:
+            campi['planilhas'].append({'caption': i[1][1].decode(campus_encoding), 'href': url_for('download_csv', planilha=i[1][1].decode(campus_encoding))})
     return render_template('planilhas.html', campi=campi)
 
 
 # app download planilhas
-@app.route('/planilhas/<tipo>/<planilha>.csv')
-def download_csv(tipo, planilha):
-    def read_csv(planilha, tipo):
-        # verifica o tipo
-        if tipo == 'presencial':
-            filename = u'%s/%s.csv' % (getenv('SISTEC_DOWNLOAD_PLANILHAS_PRESENCIAL', default='../planilhas/' + tipo), planilha)
-        elif tipo == 'ead':
-            filename = u'%s/%s.csv' % (getenv('SISTEC_DOWNLOAD_PLANILHAS_EAD', default='../planilhas/' + tipo), planilha)
-        elif tipo == 'fic':
-            filename = u'%s/%s.csv' % (getenv('SISTEC_DOWNLOAD_PLANILHAS_FIC', default='../planilhas/' + tipo), planilha)
-        else:
-            abort(404)
+@app.route('/planilhas/<planilha>.csv')
+def download_csv(planilha):
+    def read_csv(planilha):
+        filename = u'%s/%s.csv' % (getenv('SISTEC_DOWNLOAD_PLANILHAS', default='../planilhas'), planilha)
         # verifica se existe a planilha
         if not path.exists(filename):
             abort(404)
@@ -531,4 +273,4 @@ def download_csv(tipo, planilha):
         with open(filename, 'rb') as filecsv:
             for line in filecsv:
                 yield line
-    return Response(read_csv(planilha=planilha, tipo=tipo), mimetype='text/csv')
+    return Response(read_csv(planilha=planilha), mimetype='text/csv')

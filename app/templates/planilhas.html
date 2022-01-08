@@ -1,35 +1,22 @@
 {% extends "base.html" %}
-{% block title %}SISTEC-DOWNLOAD: planilhas baixadas{% endblock %}
-{% block h1 %}SISTEC-DOWNLOAD: planilhas baixadas{% endblock %}
+{% block title %}SISTEC-DOWNLOAD: planilha(s) baixada(s){% endblock %}
+{% block h1 %}SISTEC-DOWNLOAD: planilha(s) baixada(s){% endblock %}
+
 {% block content %}
-    {% if campi.presencial %}
-        <h2>Planilhas de Cursos Presenciais</h2>
-        <ul id="presencial" style="list-style-type:square">
-        {% for campus in campi.presencial %}
+
+    {% if campi.planilhas %}
+        <h2>Planilha(s) do(s) C&acirc;mpus do IFG</h2>
+        <ul id="planilhas" style="list-style-type:square">
+        {% for campus in campi.planilhas %}
             <li><a href="{{ campus.href }}">{{ campus.caption }}</a></li>
         {% endfor %}
         </ul>
     {% endif %}
 
-    {% if campi.ead %}
-        <h2>Planilhas de Cursos EaD</h2>
-        <ul id="ead" style="list-style-type:square">
-        {% for campus in campi.ead %}
-            <li><a href="{{ campus.href }}">{{ campus.caption }}</a></li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-
-    {% if campi.fic %}
-        <h2>Planilhas de Cursos FIC</h2>
-        <ul id="fic" style="list-style-type:square">
-        {% for campus in campi.fic %}
-            <li><a href="{{ campus.href }}">{{ campus.caption }}</a></li>
-        {% endfor %}
-        </ul>
-    {% endif %}
     <button id="inicio">In&iacute;cio</button>
+
 {% endblock %}
+
 {% block script %}
 {{ super() }}
 <script type="text/javascript">
