@@ -20,13 +20,13 @@ log_dir = u'%s' % getenv('SISTEC_DOWNLOAD_LOG', default='../log')
 pydbg_path = u'%s/pycurl_debug_%s.log' % (log_dir, strftime('%Y-%m-%d'))
 
 
-def get_data_sistec(cod_campus, campus, perfil, tipos, download_dir, qtde_perfis, cookies, file_log_path=None, level_debug=[False, False, False]):
+def get_data_sistec(cod_campus, campus, perfil, download_dir, qtde_perfis, cookies, file_log_path=None, level_debug=[False, False, False]):
     global host_sistec, encoding, campus_encoding
     sucesso = False
     campus = campus.decode(campus_encoding)
     campus_csv = path.join(download_dir, campus + '.csv')
     file_csv = open(campus_csv, mode='w', encoding=encoding)
-    sucesso, mensagem = write_csv(file_csv, campus, cod_campus, perfil, qtde_perfis, tipos, cookies, file_log_path, level_debug)
+    sucesso, mensagem = write_csv(file_csv, campus, cod_campus, perfil, qtde_perfis, cookies, file_log_path, level_debug)
     file_csv.close()
     if sucesso:
         if level_debug[0]:
@@ -47,7 +47,7 @@ def get_data_sistec(cod_campus, campus, perfil, tipos, download_dir, qtde_perfis
     return sucesso
 
 
-def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, tipos, cookies, file_log_path = None, level_debug = [False, False, False]):
+def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file_log_path = None, level_debug = [False, False, False]):
     u"""
     Percorre o sistec, pegando os dados dos alunos nos ciclos de matricula,
     do 'campus' e os salva no arquivo 'file_csv'.
@@ -56,7 +56,6 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, tipos, cookie
     :no_campus:          nome do campus no site do SISTEC
     :co_campus:          codigo do campus no site do SISTEC
     :perfil:             perfil do usuário no site do SISTEC
-    :tipos:              tipos de cursos [Presencial, EaD, FIC]
     :cookies:            cookies da sessão aberta para acesso ao site do SISTEC
                          [phpsessid, jsessionid, zde, perfil, noticias]
     :http_header_common: cabecalho comum das requisicoes http ao site do SISTEC
