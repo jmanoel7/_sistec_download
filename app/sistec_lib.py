@@ -13,7 +13,7 @@ CON_TIMEOUT = 300
 REQ_TIMEOUT = 3600
 headers = {}
 host_sistec = 'https://sistec.mec.gov.br'
-encoding = 'iso-8859-1'
+encoding = 'utf-8'
 campus_encoding = 'utf-8'
 log_dir = u'%s' % getenv('SISTEC_DOWNLOAD_LOG', default='../log')
 pydbg_path = u'%s/pycurl_debug_%s.log' % (log_dir, strftime('%Y-%m-%d'))
