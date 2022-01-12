@@ -342,6 +342,7 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
         http_header[-3] = http_header[-3].encode(encoding)
         post_data = {'pagina': pagina_ciclos}
         postfields = urlencode(post_data)
+
         count = 0
         while True:
             try:
@@ -379,10 +380,13 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
                 ciclos = turmas_data['dados']
             except Exception as erro:
                 count = count + 1
+                # tenta 10 vezes
                 if count > 9:
                     return (False, u"%s" % erro)
                 else:
                     continue
+            else:
+                break
 
         for i in range(len(ciclos)):
 
