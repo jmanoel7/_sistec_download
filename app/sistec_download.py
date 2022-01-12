@@ -215,6 +215,29 @@ def login():
 def download():
     error = None
     if request.method == 'POST':
+        #  # Atualizar os dados de sessao referentes aos campus do IFG
+        #  try:
+        #      campi = request.form['planilhas']
+        #  except KeyError:
+        #      campi = False
+        #  if campi == '1':
+        #      campi = True
+        #  else:
+        #      campi = False
+        #  session['planilhas'][1] = campi
+        for i in session['planilhas'][1].items():
+            key = i[0]
+            try:
+                baixar = request.form['planilha_' + key + i[1][0]]
+            except KeyError:
+                baixar = False
+            if baixar == '1':
+                baixar = True
+            else:
+                baixar = False
+            tupla = (i[1][0], i[1][1], i[1][2], baixar)
+            session['planilha'][1][key] = tupla
+        session.modified = True
         # VERIFICA SE TEM PELO MENOS UM CAMPUS MARCADO
         total_falso = True
         for i in session['planilhas'][1].items():
