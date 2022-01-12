@@ -215,16 +215,7 @@ def login():
 def download():
     error = None
     if request.method == 'POST':
-        #  # Atualizar os dados de sessao referentes aos campus do IFG
-        #  try:
-        #      campi = request.form['planilhas']
-        #  except KeyError:
-        #      campi = False
-        #  if campi == '1':
-        #      campi = True
-        #  else:
-        #      campi = False
-        #  session['planilhas'][1] = campi
+        # VERIFICANDO QUAIS CAMPUS TEM QUE BAIXAR
         for i in session['planilhas'][1].items():
             key = i[0]
             try:
@@ -297,3 +288,5 @@ def download_csv(planilha):
             for line in filecsv:
                 yield line
     return Response(read_csv(planilha=planilha), mimetype='text/csv')
+
+
