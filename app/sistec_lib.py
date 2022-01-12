@@ -342,42 +342,47 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
         http_header[-3] = http_header[-3].encode(encoding)
         post_data = {'pagina': pagina_ciclos}
         postfields = urlencode(post_data)
-        file_json = open(turmas_json, mode='wb')
-        c = pycurl.Curl()
-        c.setopt(c.URL, url_turmas)
-        c.setopt(c.SSL_VERIFYPEER, 1)
-        c.setopt(c.SSL_VERIFYHOST, 2)
-        c.setopt(c.TCP_NODELAY, 1)
-        c.setopt(c.TCP_FASTOPEN, 1)
-        c.setopt(c.CONNECTTIMEOUT, CON_TIMEOUT)
-        c.setopt(c.TIMEOUT, REQ_TIMEOUT)
-        # c.setopt(c.CAINFO, path.join(path.curdir, 'curl-ca-bundle.crt'))
-        c.setopt(c.WRITEDATA, file_json)
-        c.setopt(c.HTTPHEADER, http_header)
-        c.setopt(c.HEADERFUNCTION, _pycurl_header)
-        c.setopt(c.CUSTOMREQUEST, 'POST')
-        c.setopt(c.POSTFIELDS, postfields)
-        if level_debug[2]:
-            c.setopt(c.VERBOSE, 1)
-            c.setopt(c.DEBUGFUNCTION, _pycurl_debug)
-        c.perform()
-        c.close()
-        file_json.close()
-        file_json_r = open(turmas_json, mode='rb+')
-        limpa_arquivo(file_json_r)
-        turmas_data = json.load(file_json_r)
-        file_json_r.close()
-        if level_debug[1]:
-            with open(file_log_path, 'a') as file_log:
-                file_log.write(u'%s turmas_data:\t%s\n' % (
-                    strftime('[%Y-%m-%d %H:%M:%S]'), turmas_data))
-                file_log.flush()
-                fsync(file_log.fileno())
-
-        try:
-            ciclos = turmas_data['dados']
-        except Exception as erro:
-            return (False, u"%s" % erro)
+        count = 0
+        while True:
+            try:
+                file_json = open(turmas_json, mode='wb')
+                c = pycurl.Curl()
+                c.setopt(c.URL, url_turmas)
+                c.setopt(c.SSL_VERIFYPEER, 1)
+                c.setopt(c.SSL_VERIFYHOST, 2)
+                c.setopt(c.TCP_NODELAY, 1)
+                c.setopt(c.TCP_FASTOPEN, 1)
+                c.setopt(c.CONNECTTIMEOUT, CON_TIMEOUT)
+                c.setopt(c.TIMEOUT, REQ_TIMEOUT)
+                # c.setopt(c.CAINFO, path.join(path.curdir, 'curl-ca-bundle.crt'))
+                c.setopt(c.WRITEDATA, file_json)
+                c.setopt(c.HTTPHEADER, http_header)
+                c.setopt(c.HEADERFUNCTION, _pycurl_header)
+                c.setopt(c.CUSTOMREQUEST, 'POST')
+                c.setopt(c.POSTFIELDS, postfields)
+                if level_debug[2]:
+                    c.setopt(c.VERBOSE, 1)
+                    c.setopt(c.DEBUGFUNCTION, _pycurl_debug)
+                c.perform()
+                c.close()
+                file_json.close()
+                file_json_r = open(turmas_json, mode='rb+')
+                limpa_arquivo(file_json_r)
+                turmas_data = json.load(file_json_r)
+                file_json_r.close()
+                if level_debug[1]:
+                    with open(file_log_path, 'a') as file_log:
+                        file_log.write(u'%s turmas_data:\t%s\n' % (
+                            strftime('[%Y-%m-%d %H:%M:%S]'), turmas_data))
+                        file_log.flush()
+                        fsync(file_log.fileno())
+                ciclos = turmas_data['dados']
+            except Exception as erro:
+                count = count + 1
+                if count > 9:
+                    return (False, u"%s" % erro)
+                else:
+                    continue
 
         for i in range(len(ciclos)):
 
