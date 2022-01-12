@@ -227,7 +227,7 @@ def download():
             else:
                 baixar = False
             tupla = (i[1][0], i[1][1], i[1][2], baixar)
-            session['planilha'][1][key] = tupla
+            session['planilhas'][1][key] = tupla
         session.modified = True
         # VERIFICA SE TEM PELO MENOS UM CAMPUS MARCADO
         total_falso = True
