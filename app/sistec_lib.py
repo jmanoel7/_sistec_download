@@ -350,7 +350,7 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
                 if level_debug[0]:
                     with open(file_log_path, 'a') as file_log:
                         file_log.write(
-                            u'%s %d tentativa: ...\n' %
+                            u'%s %d tentativa(s): ...\n' %
                             (strftime('[%Y-%m-%d %H:%M:%S]'), count + 1))
                         file_log.flush()
                         fsync(file_log.fileno())
