@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 import re
 import json
 import pycurl
@@ -9,12 +8,12 @@ from time import strftime
 from io import BytesIO
 from urllib.parse import urlencode
 
-
 CON_TIMEOUT = 300
 REQ_TIMEOUT = 3600
 headers = {}
 host_sistec = 'https://sistec.mec.gov.br'
-encoding = 'iso-8859-1'
+encoding = 'utf-8'
+#encoding = 'iso-8859-1'
 campus_encoding = 'utf-8'
 log_dir = u'%s' % getenv('SISTEC_DOWNLOAD_LOG', default='../log')
 pydbg_path = u'%s/pycurl_debug_%s.log' % (log_dir, strftime('%Y-%m-%d'))
@@ -31,23 +30,27 @@ def get_data_sistec(cod_campus, campus, perfil, download_dir, qtde_perfis, cooki
     if sucesso:
         if level_debug[0]:
             with open(file_log_path, 'a') as file_log:
-                file_log.write(u'%s O download da planilha do SISTEC (%s) foi efetuado com sucesso em:\t%s\n' % (
-                    strftime('[%Y-%m-%d %H:%M:%S]'), campus.title(), campus_csv))
+                file_log.write(
+                    u'%s O download da planilha do SISTEC (%s) foi efetuado com sucesso em:\t%s\n'
+                    % (strftime('[%Y-%m-%d %H:%M:%S]'), campus.title(),
+                       campus_csv))
                 file_log.flush()
                 fsync(file_log.fileno())
         sucesso = True
     else:
         if level_debug[0]:
             with open(file_log_path, 'a') as file_log:
-                file_log.write(u'%s Não foi possível salvar a planilha do SISTEC (%s) em:\t%s\t%s\n' % (
-                    strftime('[%Y-%m-%d %H:%M:%S]'), campus.title(), campus_csv, mensagem))
+                file_log.write(
+                    u'%s Não foi possível salvar a planilha do SISTEC (%s) em:\t%s\t%s\n'
+                    % (strftime('[%Y-%m-%d %H:%M:%S]'), campus.title(),
+                       campus_csv, mensagem))
                 file_log.flush()
                 fsync(file_log.fileno())
         sucesso = False
     return sucesso
 
 
-def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file_log_path = None, level_debug = [False, False, False]):
+def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file_log_path=None, level_debug=[False, False, False]):
     u"""
     Percorre o sistec, pegando os dados dos alunos nos ciclos de matricula,
     do 'campus' e os salva no arquivo 'file_csv'.
@@ -64,24 +67,24 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
     global headers, host_sistec, encoding, CON_TIMEOUT, REQ_TIMEOUT
 
     url_alterar_perfil = 'https://sistec.mec.gov.br/index/selecionarinstituicao/alterar/perfil'
-    url_index          = 'https://sistec.mec.gov.br/index/index'
-    url_turmas         = 'https://sistec.mec.gov.br/gridciclo/turmas'
-    url_ciclo_common   = 'https://sistec.mec.gov.br/gridciclo/listaralunosacao/periodo/-1/ciclo/'
-    url_tempo_sessao   = 'https://sistec.mec.gov.br/tempo-sessao/get-tempo-sessao/'
+    url_index = 'https://sistec.mec.gov.br/index/index'
+    url_turmas = 'https://sistec.mec.gov.br/gridciclo/turmas'
+    url_ciclo_common = 'https://sistec.mec.gov.br/gridciclo/listaralunosacao/periodo/-1/ciclo/'
+    url_tempo_sessao = 'https://sistec.mec.gov.br/tempo-sessao/get-tempo-sessao/'
 
     #header_cache          = 'Cache-Control: max-age=0'
     #header_dnt            = 'DNT: 1'
-    header_connection     = 'Connection: keep-alive'
-    header_upgrade        = 'Upgrade-Insecure-Requests: 1'
-    header_content_type   = 'Content-type: application/x-www-form-urlencoded charset=' + encoding
-    header_content_len    = 'Content-Length: 0'
-    header_user_agent     = 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101 Firefox/96.0'
-    header_accept_text    = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
-    header_accept_lang    = 'Accept-Language: pt-BR,pt;q=0.8,en-US;q=0.5,en;q=0.3'
-    header_accept_json    = 'Accept: application/json'
-    header_accept_enc     = 'Accept-Encoding: gzip, deflate, br'
-    header_xreq_xml       = 'X-Requested-With: XMLHttpRequest'
-    header_xreq_json      = 'X-Request: JSON'
+    header_connection = 'Connection: keep-alive'
+    header_upgrade = 'Upgrade-Insecure-Requests: 1'
+    header_content_type = 'Content-type: application/x-www-form-urlencoded charset=' + encoding
+    header_content_len = 'Content-Length: 0'
+    header_user_agent = 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101 Firefox/96.0'
+    header_accept_text = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+    header_accept_lang = 'Accept-Language: pt-BR,pt;q=0.8,en-US;q=0.5,en;q=0.3'
+    header_accept_json = 'Accept: application/json'
+    header_accept_enc = 'Accept-Encoding: gzip, deflate, br'
+    header_xreq_xml = 'X-Requested-With: XMLHttpRequest'
+    header_xreq_json = 'X-Request: JSON'
     header_sec_fetch_site = 'Sec-Fetch-Site: '
     header_sec_fetch_mode = 'Sec-Fetch-Mode: '
     header_sec_fetch_user = 'Sec-Fetch-User: '
@@ -92,8 +95,10 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
     cookie_perfil = u'perfil_cookie=' + perfil
     cookie_usuario = u'co_usuario=' + co_campus
 
-    turmas_json = path.join(getenv('SISTEC_DOWNLOAD_APP', default=path.curdir), '_turmas.json')
-    alunos_json = path.join(getenv('SISTEC_DOWNLOAD_APP', default=path.curdir), '_alunos.json')
+    turmas_json = path.join(getenv('SISTEC_DOWNLOAD_APP', default=path.curdir),
+                            '_turmas.json')
+    alunos_json = path.join(getenv('SISTEC_DOWNLOAD_APP', default=path.curdir),
+                            '_alunos.json')
 
     # COLUNAS DO ARQUIVO CSV
     # 00: CO_ALUNO_IDENTIFICADO       # 01: CO_ALUNO                     # 02: NO_ALUNO                     # 03: NO_MAE_ALUNO             # 04: NO_NOME_SOCIAL
@@ -147,34 +152,25 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
 
     if level_debug[0]:
         with open(file_log_path, 'a') as file_log:
-            file_log.write(u'%s Acessando o peril do %s ...\n' % (strftime('[%Y-%m-%d %H:%M:%S]'), no_campus.title()))
+            file_log.write(
+                u'%s Acessando o peril do %s ...\n' %
+                (strftime('[%Y-%m-%d %H:%M:%S]'), no_campus.title()))
             file_log.flush()
             fsync(file_log.fileno())
     headers = {}
     http_header = [
-        header_user_agent,
-        header_accept_text,
-        header_accept_lang,
-        header_accept_enc,
-        header_content_type,
-        header_connection,
-        header_upgrade,
-        header_sec_fetch_dest + 'document',
+        header_user_agent, header_accept_text, header_accept_lang,
+        header_accept_enc, header_content_type, header_connection,
+        header_upgrade, header_sec_fetch_dest + 'document',
         header_sec_fetch_mode + 'navigate',
-        header_sec_fetch_site + 'same-origin',
-        header_sec_fetch_user + '?1',
-        'Origin: ' + host_sistec,
-        'Referer: ' + url_alterar_perfil,
+        header_sec_fetch_site + 'same-origin', header_sec_fetch_user + '?1',
+        'Origin: ' + host_sistec, 'Referer: ' + url_alterar_perfil,
         'Cookie: ' + cookie_phpsessid + '; ' + cookie_perfil + '; ' + cookie_noticias + '; ' + cookie_usuario
     ]
     http_header[-1] = http_header[-1].encode(encoding)
     http_header[-2] = http_header[-2].encode(encoding)
     http_header[-3] = http_header[-3].encode(encoding)
-    post_data = {
-        'tipo': co_campus,
-        'acao': '',
-        'qtdPerfis': str(qtde_perfis)
-    }
+    post_data = {'tipo': co_campus, 'acao': '', 'qtdPerfis': str(qtde_perfis)}
     postfields = urlencode(post_data)
     buff = BytesIO()
     c = pycurl.Curl()
@@ -198,7 +194,8 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
     c.close()
     if level_debug[1]:
         with open(file_log_path, 'a') as file_log:
-            file_log.write(u'%s post_data:\t%s\n' % (strftime('[%Y-%m-%d %H:%M:%S]'), post_data))
+            file_log.write(u'%s post_data:\t%s\n' %
+                           (strftime('[%Y-%m-%d %H:%M:%S]'), post_data))
             file_log.flush()
             fsync(file_log.fileno())
 
@@ -231,26 +228,19 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
         """
         if level_debug[0]:
             with open(file_log_path, 'a') as file_log:
-                file_log.write(u'%s Tempo de sessão do %s ... ' % (strftime('[%Y-%m-%d %H:%M:%S]'), no_campus.title()))
+                file_log.write(
+                    u'%s Tempo de sessão do %s ... ' %
+                    (strftime('[%Y-%m-%d %H:%M:%S]'), no_campus.title()))
                 file_log.flush()
                 fsync(file_log.fileno())
         headers = {}
         http_header = [
-            header_user_agent,
-            header_accept_json,
-            header_accept_lang,
-            header_accept_enc,
-            header_xreq_xml,
-            header_xreq_json,
-            header_content_type,
-            header_content_len,
-            header_connection,
-            header_sec_fetch_dest + 'empty',
-            header_sec_fetch_mode + 'cors',
-            header_sec_fetch_site + 'same-origin',
-            'Origin: ' + host_sistec,
-            'Referer: ' + url_index,
-            'Cookie: ' + cookie_noticias + '; ' + cookie_phpsessid + '; ' + cookie_perfil + '; ' + cookie_usuario
+            header_user_agent, header_accept_json, header_accept_lang,
+            header_accept_enc, header_xreq_xml, header_xreq_json,
+            header_content_type, header_content_len, header_connection,
+            header_sec_fetch_dest + 'empty', header_sec_fetch_mode + 'cors',
+            header_sec_fetch_site + 'same-origin', 'Origin: ' + host_sistec,
+            'Referer: ' + url_index, 'Cookie: ' + cookie_noticias + '; ' + cookie_phpsessid + '; ' + cookie_perfil + '; ' + cookie_usuario
         ]
         http_header[-1] = http_header[-1].encode(encoding)
         http_header[-2] = http_header[-2].encode(encoding)
@@ -280,7 +270,6 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
                 file_log.write(u'%s\n' % tempo_sessao)
                 file_log.flush()
                 fsync(file_log.fileno())
-
         """
         curl 'https://sistec.mec.gov.br/gridciclo/turmas'
             -X POST
@@ -310,25 +299,20 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
         """
         if level_debug[0]:
             with open(file_log_path, 'a') as file_log:
-                file_log.write(u'%s Acessando a página %s/%s da lista de ciclos do %s ...\n' % (
-                    strftime('[%Y-%m-%d %H:%M:%S]'), pagina_ciclos, total_paginas_ciclos, no_campus.title()))
+                file_log.write(
+                    u'%s Acessando a página %s/%s da lista de ciclos do %s ...\n'
+                    % (strftime('[%Y-%m-%d %H:%M:%S]'), pagina_ciclos,
+                       total_paginas_ciclos, no_campus.title()))
                 file_log.flush()
                 fsync(file_log.fileno())
         headers = {}
         http_header = [
-            header_user_agent,
-            header_accept_json,
-            header_accept_lang,
-            header_accept_enc,
-            header_xreq_xml,
-            header_xreq_json,
-            header_content_type,
-            header_connection,
-            header_sec_fetch_dest + 'empty',
-            header_sec_fetch_mode + 'cors',
+            header_user_agent, header_accept_json, header_accept_lang,
+            header_accept_enc, header_xreq_xml, header_xreq_json,
+            header_content_type, header_connection,
+            header_sec_fetch_dest + 'empty', header_sec_fetch_mode + 'cors',
             header_sec_fetch_site + 'same-origin'
-            'Origin: ' + host_sistec,
-            'Referer: ' + url_index,
+            'Origin: ' + host_sistec, 'Referer: ' + url_index,
             'Cookie: ' + cookie_noticias + '; ' + cookie_phpsessid + '; ' + cookie_perfil + '; ' + cookie_usuario
         ]
         http_header[-1] = http_header[-1].encode(encoding)
@@ -361,14 +345,21 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
                 c.perform()
                 c.close()
                 file_json.close()
-                file_json_r = open(turmas_json, mode='rb+')
-                limpa_arquivo(file_json_r)
+                file_json_r = open(turmas_json, mode='rb')
                 turmas_data = json.load(file_json_r)
                 file_json_r.close()
+                if level_debug[0]:
+                    with open(file_log_path, 'a') as file_log:
+                        file_log.write(
+                            u'%s %d tentativa: ...\n' %
+                            (strftime('[%Y-%m-%d %H:%M:%S]'), count + 1))
+                        file_log.flush()
+                        fsync(file_log.fileno())
                 if level_debug[1]:
                     with open(file_log_path, 'a') as file_log:
-                        file_log.write(u'%s turmas_data:\t%s\n' % (
-                            strftime('[%Y-%m-%d %H:%M:%S]'), turmas_data))
+                        file_log.write(
+                            u'%s turmas_data:\t%s\n' %
+                            (strftime('[%Y-%m-%d %H:%M:%S]'), turmas_data))
                         file_log.flush()
                         fsync(file_log.fileno())
                 ciclos = turmas_data['dados']
@@ -400,14 +391,19 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
 
             # PEGA O CODIGO DA UNIDADE DE ENSINO:
             co_unidade_ensino = ciclos[i]['Alunos']['eventos']['click']
-            match = re.search(r'^.*\"instituicao\":(\d+).*$', co_unidade_ensino)
+            match = re.search(r'^.*\"instituicao\":(\d+).*$',
+                              co_unidade_ensino)
             if not match:
-                return (False, u"não foi possível determinar o código da unidade de ensino:\t%s" % co_unidade_ensino)
+                return (
+                    False,
+                    u"não foi possível determinar o código da unidade de ensino:\t%s"
+                    % co_unidade_ensino)
             co_unidade_ensino = match.group(1)
             if level_debug[1]:
                 with open(file_log_path, 'a') as file_log:
-                    file_log.write(u'%s co_unidade_ensino:\t%s\n' % (
-                        strftime('[%Y-%m-%d %H:%M:%S]'), co_unidade_ensino))
+                    file_log.write(
+                        u'%s co_unidade_ensino:\t%s\n' %
+                        (strftime('[%Y-%m-%d %H:%M:%S]'), co_unidade_ensino))
                     file_log.flush()
                     fsync(file_log.fileno())
 
@@ -415,12 +411,15 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
             co_ciclo_matricula = ciclos[i]['Alunos']['id']
             match = re.search(r'^.*acao_(\d+).*$', co_ciclo_matricula)
             if not match:
-                return (False, u"não foi possível determinar o código do ciclo:\t%s" % co_ciclo_matricula)
+                return (False,
+                        u"não foi possível determinar o código do ciclo:\t%s" %
+                        co_ciclo_matricula)
             co_ciclo_matricula = match.group(1)
             if level_debug[1]:
                 with open(file_log_path, 'a') as file_log:
-                    file_log.write(u'%s co_ciclo_matricula:\t%s\n' % (
-                        strftime('[%Y-%m-%d %H:%M:%S]'), co_ciclo_matricula))
+                    file_log.write(
+                        u'%s co_ciclo_matricula:\t%s\n' %
+                        (strftime('[%Y-%m-%d %H:%M:%S]'), co_ciclo_matricula))
                     file_log.flush()
                     fsync(file_log.fileno())
 
@@ -428,20 +427,24 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
             periodo_ciclo = ciclos[i]['Período do Ciclo']
             if level_debug[1]:
                 with open(file_log_path, 'a') as file_log:
-                    file_log.write(u'%s periodo_ciclo:\t%s\n' % (
-                        strftime('[%Y-%m-%d %H:%M:%S]'), periodo_ciclo))
+                    file_log.write(
+                        u'%s periodo_ciclo:\t%s\n' %
+                        (strftime('[%Y-%m-%d %H:%M:%S]'), periodo_ciclo))
                     file_log.flush()
                     fsync(file_log.fileno())
 
             # PEGA A DATA DO INICO:
             match = re.search(r'^.*(\d{2}/\d{2}/\d{4}).*$', periodo_ciclo)
             if not match:
-                return (False, u"não foi possível determinar a data do início:\t%s" % periodo_ciclo)
+                return (False,
+                        u"não foi possível determinar a data do início:\t%s" %
+                        periodo_ciclo)
             dt_data_inicio = match.group(1).strip()
             if level_debug[1]:
                 with open(file_log_path, 'a') as file_log:
-                    file_log.write(u'%s dt_data_inicio:\t%s\n' % (
-                        strftime('[%Y-%m-%d %H:%M:%S]'), dt_data_inicio))
+                    file_log.write(
+                        u'%s dt_data_inicio:\t%s\n' %
+                        (strftime('[%Y-%m-%d %H:%M:%S]'), dt_data_inicio))
                     file_log.flush()
                     fsync(file_log.fileno())
 
@@ -450,8 +453,9 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
             no_ciclo_matricula = no_ciclo_matricula.strip()
             if level_debug[1]:
                 with open(file_log_path, 'a') as file_log:
-                    file_log.write(u'%s no_ciclo_matricula:\t%s\n' % (
-                        strftime('[%Y-%m-%d %H:%M:%S]'), no_ciclo_matricula))
+                    file_log.write(
+                        u'%s no_ciclo_matricula:\t%s\n' %
+                        (strftime('[%Y-%m-%d %H:%M:%S]'), no_ciclo_matricula))
                     file_log.flush()
                     fsync(file_log.fileno())
 
@@ -496,26 +500,22 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
                 """
                 if level_debug[0]:
                     with open(file_log_path, 'a') as file_log:
-                        file_log.write(u'%s Acessando a lista de alunos (%s) do ciclo:\t%s ...\n' % (
-                            strftime('[%Y-%m-%d %H:%M:%S]'), no_campus.title(), no_ciclo_matricula.title()))
+                        file_log.write(
+                            u'%s Acessando a lista de alunos (%s) do ciclo:\t%s ...\n'
+                            % (strftime('[%Y-%m-%d %H:%M:%S]'),
+                               no_campus.title(), no_ciclo_matricula.title()))
                         file_log.flush()
                         fsync(file_log.fileno())
                 headers = {}
                 url_ciclo = url_ciclo_common + co_ciclo_matricula + '/coaluno/'
                 http_header = [
-                    header_user_agent,
-                    header_accept_json,
-                    header_accept_lang,
-                    header_accept_enc,
-                    header_xreq_xml,
-                    header_xreq_json,
-                    header_content_type,
-                    header_connection,
+                    header_user_agent, header_accept_json, header_accept_lang,
+                    header_accept_enc, header_xreq_xml, header_xreq_json,
+                    header_content_type, header_connection,
                     header_sec_fetch_dest + 'empty',
                     header_sec_fetch_mode + 'cors',
                     header_sec_fetch_site + 'same-origin',
-                    'Origin: ' + host_sistec,
-                    'Referer: ' + url_index,
+                    'Origin: ' + host_sistec, 'Referer: ' + url_index,
                     'Cookie: ' + cookie_noticias + '; ' + cookie_phpsessid + '; ' + cookie_perfil + '; ' + cookie_usuario
                 ]
                 http_header[-1] = http_header[-1].encode(encoding)
@@ -544,20 +544,23 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
                 c.perform()
                 c.close()
                 file_json.close()
-                file_json_r = open(alunos_json, mode='rb+')
-                limpa_arquivo(file_json_r)
+                file_json_r = open(alunos_json, mode='rb')
                 alunos_data = json.load(file_json_r)
                 file_json_r.close()
                 if level_debug[1]:
                     with open(file_log_path, 'a') as file_log:
-                        file_log.write(u'%s url_ciclo:\t%s\n' % (
-                            strftime('[%Y-%m-%d %H:%M:%S]'), url_ciclo))
-                        file_log.write(u'%s http_header:\t%s\n' % (
-                            strftime('[%Y-%m-%d %H:%M:%S]'), http_header))
-                        file_log.write(u'%s post_data:\t%s\n' % (
-                            strftime('[%Y-%m-%d %H:%M:%S]'), post_data))
-                        file_log.write(u'%s alunos_data:\t%s\n' % (
-                            strftime('[%Y-%m-%d %H:%M:%S]'), alunos_data))
+                        file_log.write(
+                            u'%s url_ciclo:\t%s\n' %
+                            (strftime('[%Y-%m-%d %H:%M:%S]'), url_ciclo))
+                        file_log.write(
+                            u'%s http_header:\t%s\n' %
+                            (strftime('[%Y-%m-%d %H:%M:%S]'), http_header))
+                        file_log.write(
+                            u'%s post_data:\t%s\n' %
+                            (strftime('[%Y-%m-%d %H:%M:%S]'), post_data))
+                        file_log.write(
+                            u'%s alunos_data:\t%s\n' %
+                            (strftime('[%Y-%m-%d %H:%M:%S]'), alunos_data))
                         file_log.flush()
                         fsync(file_log.fileno())
 
@@ -568,8 +571,6 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
                         total_paginas_alunos = alunos_data['totalPaginas']
                     except Exception as erro:
                         return (False, u"%s" % erro)
-                    # print(pagina_alunos)
-                    # print(total_paginas_alunos)
                     if pagina_alunos < total_paginas_alunos:
                         pagina_alunos = pagina_alunos + 1
                         continue_alunos = 1
@@ -578,10 +579,10 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
 
                 if continue_alunos == 1:
                     continue_alunos = 0
-                    continue # while alunos
+                    continue  # while alunos
                 elif continue_alunos == 2:
                     continue_alunos = 0
-                    break # while alunos
+                    break  # while alunos
 
                 for j in range(len(alunos)):
 
@@ -591,8 +592,9 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
                     nome_aluno = alunos[j]['Aluno']
                     if level_debug[1]:
                         with open(file_log_path, 'a') as file_log:
-                            file_log.write(u'%s nome_aluno:\t%s\n' % (
-                                strftime('[%Y-%m-%d %H:%M:%S]'), nome_aluno))
+                            file_log.write(
+                                u'%s nome_aluno:\t%s\n' %
+                                (strftime('[%Y-%m-%d %H:%M:%S]'), nome_aluno))
                             file_log.flush()
                             fsync(file_log.fileno())
                     nome_aluno = nome_aluno.strip() + ';'
@@ -603,38 +605,39 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
                     cpf_aluno = alunos[j]['CPF']
                     if level_debug[1]:
                         with open(file_log_path, 'a') as file_log:
-                            file_log.write(u'%s cpf_aluno:\t%s\n' % (
-                                strftime('[%Y-%m-%d %H:%M:%S]'), cpf_aluno))
+                            file_log.write(
+                                u'%s cpf_aluno:\t%s\n' %
+                                (strftime('[%Y-%m-%d %H:%M:%S]'), cpf_aluno))
                             file_log.flush()
                             fsync(file_log.fileno())
                     cpf_aluno = cpf_aluno.strip() + ';'
 
                     line.append(cpf_aluno)
 
-                    line.append(line_common[0]) # co_ciclo_matricula
+                    line.append(line_common[0])  # co_ciclo_matricula
 
                     # PEGA O STATUS DO ALUNO:
                     status_aluno = alunos[j]['Status']
                     if level_debug[1]:
                         with open(file_log_path, 'a') as file_log:
-                            file_log.write(u'%s status_aluno:\t%s\n' % (
-                                strftime('[%Y-%m-%d %H:%M:%S]'), status_aluno))
+                            file_log.write(u'%s status_aluno:\t%s\n' %
+                                           (strftime('[%Y-%m-%d %H:%M:%S]'),
+                                            status_aluno))
                             file_log.flush()
                             fsync(file_log.fileno())
                     status_aluno = status_aluno.strip() + ';'
 
                     line.append(status_aluno)
 
-                    line.append(line_common[1]) # no_ciclo_matricula
+                    line.append(line_common[1])  # no_ciclo_matricula
 
-                    line.append(line_common[2]) # dt_data_inicio
+                    line.append(line_common[2])  # dt_data_inicio
 
-                    line.append(line_common[3]) # co_unidade_ensino
+                    line.append(line_common[3])  # co_unidade_ensino
 
                     # ADICIONA UMA LINHA DA PLANILHA NO ARRAY "lines":
                     line.append(u'\n')
                     line = u''.join(line)
-                    line = limpa_linha(line, encoding)
                     lines.append(line)
 
                 try:
@@ -665,51 +668,12 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
     return (True, u'OK')
 
 
-def limpa_linha(linha, encoding):
-    try:
-        linha = linha.encode(encoding)
-    except UnicodeEncodeError:
-        nova_linha = []
-        for i in range(len(linha)):
-            try:
-                nova_linha.append(linha[i].encode(encoding))
-            except UnicodeEncodeError:
-                pass
-        linha = u''.encode(encoding).join(nova_linha)
-    linha = linha.decode('unicode-escape')
-    linha = re.sub(r'\s+', u' ', linha)
-    linha = re.sub(r'\s*;\s*', u';', linha)
-    linha = re.sub(r'\s*$', u'', linha)
-    linha = linha + u'\n'
-    return linha
-
-
-def limpa_arquivo(arquivo):
-    while True:
-        try:
-            arquivo.seek(-1, path.os.SEEK_END)
-        except OSError:
-            arquivo.seek(0)
-            return
-        c = arquivo.read(1)
-        if not c:
-            arquivo.seek(0)
-            return
-        c = c.decode('unicode-escape')
-        r = re.compile(u'[\s\"\'\)\]\}]')
-        m = r.search(c)
-        if m:
-            arquivo.seek(0)
-            return
-        arquivo.seek(-1, path.os.SEEK_END)
-        arquivo.truncate()
-        arquivo.flush()
-
-
 def _pycurl_debug(debug_type, debug_msg):
     global pydbg_path
     with open(pydbg_path, 'a') as pydbg_file:
-        pydbg_file.write(u'%s DEBUG(%d):\t%s\n' % (strftime('[%Y-%m-%d %H:%M:%S]'), debug_type, debug_msg))
+        pydbg_file.write(
+            u'%s DEBUG(%d):\t%s\n' %
+            (strftime('[%Y-%m-%d %H:%M:%S]'), debug_type, debug_msg))
         pydbg_file.flush()
         fsync(pydbg_file.fileno())
 
