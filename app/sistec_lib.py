@@ -367,7 +367,7 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
                 c.perform()
                 c.close()
                 file_json.close()
-                file_json_r = open(turmas_json, mode='rb+')
+                file_json_r = open(turmas_json, mode='rb')
                 turmas_data = json.load(file_json_r)
                 file_json_r.close()
                 if level_debug[0]:
