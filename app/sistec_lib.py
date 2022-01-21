@@ -368,7 +368,6 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
                 c.close()
                 file_json.close()
                 file_json_r = open(turmas_json, mode='rb+')
-                limpa_arquivo(file_json_r)
                 turmas_data = json.load(file_json_r)
                 file_json_r.close()
                 if level_debug[1]:
@@ -619,8 +618,7 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
                 c.perform()
                 c.close()
                 file_json.close()
-                file_json_r = open(alunos_json, mode='rb+')
-                limpa_arquivo(file_json_r)
+                file_json_r = open(alunos_json, mode='rb')
                 alunos_data = json.load(file_json_r)
                 file_json_r.close()
                 if level_debug[1]:
@@ -698,7 +696,6 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
                     # ADICIONA UMA LINHA DA PLANILHA NO ARRAY "lines":
                     line.append(u'\n')
                     line = u''.join(line)
-                    line = limpa_linha(line, encoding)
                     if line not in lines:
                         lines.append(line)
 
@@ -728,47 +725,6 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
         fsync(file_csv.fileno())
 
     return (True, u'OK')
-
-
-def limpa_linha(linha, encoding):
-    try:
-        linha = linha.encode(encoding)
-    except UnicodeEncodeError:
-        nova_linha = []
-        for i in range(len(linha)):
-            try:
-                nova_linha.append(linha[i].encode(encoding))
-            except UnicodeEncodeError:
-                pass
-        linha = u''.encode(encoding).join(nova_linha)
-    linha = linha.decode('unicode-escape')
-    linha = re.sub(r'\s+', u' ', linha)
-    linha = re.sub(r'\s*;\s*', u';', linha)
-    linha = re.sub(r'\s*$', u'', linha)
-    linha = linha + u'\n'
-    return linha
-
-
-def limpa_arquivo(arquivo):
-    while True:
-        try:
-            arquivo.seek(-1, path.os.SEEK_END)
-        except OSError:
-            arquivo.seek(0)
-            return
-        c = arquivo.read(1)
-        if not c:
-            arquivo.seek(0)
-            return
-        c = c.decode('unicode-escape')
-        r = re.compile(u'[\s\"\'\)\]\}]')
-        m = r.search(c)
-        if m:
-            arquivo.seek(0)
-            return
-        arquivo.seek(-1, path.os.SEEK_END)
-        arquivo.truncate()
-        arquivo.flush()
 
 
 def _pycurl_debug(debug_type, debug_msg):
