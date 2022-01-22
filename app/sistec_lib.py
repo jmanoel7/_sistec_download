@@ -703,8 +703,8 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
                     # ADICIONA UMA LINHA DA PLANILHA NO ARRAY "lines":
                     line.append(u'\n')
                     line = u''.join(line)
-                    if line not in lines:
-                        lines.append(line)
+                    line = line.encode(encoding)
+                    lines.append(line)
 
                 try:
                     total_paginas_alunos = alunos_data['totalPaginas']
@@ -727,9 +727,12 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
         break  # while ciclos
 
     if lines:
-        file_csv.writelines(lines)
-        file_csv.flush()
-        fsync(file_csv.fileno())
+        try:
+            file_csv.writelines(lines)
+            file_csv.flush()
+            fsync(file_csv.fileno())
+        except Exception as erro:
+            return (False, u"%s" % erro)
 
     return (True, u'OK')
 
