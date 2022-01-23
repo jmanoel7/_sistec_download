@@ -708,7 +708,8 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
                     except UnicodeEncodeError:
                         new_line = limpa_linha(line, encoding)
                     line = new_line.decode(encoding)
-                    lines.append(line)
+                    if line not in lines:
+                        lines.append(line)
 
                 try:
                     total_paginas_alunos = alunos_data['totalPaginas']
