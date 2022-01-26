@@ -637,6 +637,11 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
                     # ADICIONA UMA LINHA DA PLANILHA NO ARRAY "lines":
                     line.append(u'\n')
                     line = u''.join(line)
+                    try:
+                        new_line = line.encode(encoding)
+                    except UnicodeEncodeError:
+                        new_line = limpa_linha(line, encoding)
+                    line = new_line.decode(encoding)
                     lines.append(line)
 
                 try:
@@ -660,11 +665,28 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtde_perfis, cookies, file
         break  # while ciclos
 
     if lines:
-        file_csv.writelines(lines)
-        file_csv.flush()
-        fsync(file_csv.fileno())
+        try:
+            file_csv.writelines(lines)
+            file_csv.flush()
+            fsync(file_csv.fileno())
+        except Exception as erro:
+            return (False, u"%s" % erro)
 
     return (True, u'OK')
+
+
+def limpa_linha(line, encoding):
+    new_line = []
+    for i in range(len(line)):
+        try:
+            new_line.append(line[i].encode(encoding))
+        except UnicodeEncodeError:
+            new_line.append(u'_'.encode(encoding))
+    for i in range(len(new_line)):
+        new_line[i] = new_line[i].decode(encoding)
+    new_line = u''.join(new_line)
+    new_line = new_line.encode(encoding)
+    return (new_line)
 
 
 def _pycurl_debug(debug_type, debug_msg):
