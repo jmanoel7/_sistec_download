@@ -82,12 +82,12 @@ sudo apt install python3.9 python3-pip python3-setuptools python3-wheel virtuale
 
 - Em Desenvolvimento (com jupyterlab):
 ```sh
-/srv/www/sistec_download/config/mkvenv_sistec_download_dev.sh
+/srv/www/sistec_download/bin/mkvenv_sistec_download_dev.sh
 ```
 
 - Em produção (sem o jupyterlab):
 ```sh
-/srv/www/sistec_download/config/mkvenv_sistec_download_prod.sh
+/srv/www/sistec_download/bin/mkvenv_sistec_download_prod.sh
 ```
 
 ### Instalando o Apache2
