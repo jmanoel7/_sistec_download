@@ -110,7 +110,7 @@ Tanto em:
 
 como em:
 
-``/srv/www/sistec_download/config/001-sistec_download.conf``
+``/srv/www/sistec_download/config/sistec_download.conf``
 
 altere a seguinte linha:
 
@@ -137,9 +137,9 @@ sudo mv /etc/apache2/envvars /etc/apache2/envvars.bak
 sudo cp /srv/www/sistec_download/config/envvars /etc/apache2/envvars
 sudo mv /etc/apache2/ports.conf /etc/apache2/ports.conf.bak
 sudo cp /srv/www/sistec_download/config/ports.conf /etc/apache2/ports.conf
-sudo cp /srv/www/sistec_download/config/001-sistec_download.conf /etc/apache2/sites-available/001-sistec_download.conf
+sudo cp /srv/www/sistec_download/config/sistec_download.conf /etc/apache2/sites-available/sistec_download.conf
 sudo a2enmod wsgi
-sudo a2ensite 001-sistec_download.conf
+sudo a2ensite sistec_download.conf
 sudo a2dissite 000-default.conf
 sudo systemctl restart apache2.service
 ```
