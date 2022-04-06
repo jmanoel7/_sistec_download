@@ -131,6 +131,9 @@ para o admin do sistec_download da sua instituição:
 Agora execute esses comandos:
 
 ```sh
+sudo mv /etc/hosts /etc/hosts.bak
+sudo cp hosts /etc/hosts
+sudo cp *.pem /etc/ssl/certs/
 sudo mv /etc/apache2/apache2.conf /etc/apache2/apache2.conf.bak
 sudo cp /srv/www/sistec_download/config/apache2.conf /etc/apache2/apache2.conf
 sudo mv /etc/apache2/envvars /etc/apache2/envvars.bak
