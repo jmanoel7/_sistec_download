@@ -76,7 +76,7 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
     header_upgrade        = 'Upgrade-Insecure-Requests: 1'
     header_content_type   = 'Content-type: application/x-www-form-urlencoded charset=' + encoding
     header_content_len    = 'Content-Length: 0'
-    header_user_agent     = 'User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101 Firefox/96.0'
+    header_user_agent     = 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36'
     header_accept_text    = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
     header_accept_lang    = 'Accept-Language: pt-BR,pt;q=0.8,en-US;q=0.5,en;q=0.3'
     header_accept_json    = 'Accept: application/json'
