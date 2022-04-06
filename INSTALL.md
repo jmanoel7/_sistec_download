@@ -26,7 +26,7 @@
 
 - Para baixar no diretório corrente:
 ```sh
-curl -L -O http://sft.if.usp.br/debian-cd/11.2.0/amd64/iso-cd/debian-11.2.0-amd64-netinst.iso
+curl -L -O http://sft.if.usp.br/debian-cd/11.3.0/amd64/iso-cd/debian-edu-11.3.0-amd64-netinst.iso
 ```
 
 - Guia de Instalação acessado a partir do navegador firefox:
