@@ -107,6 +107,7 @@ log/
 upload/
 _alunos.json
 _turmas.json
+_info.json
 *.csv
 *.sql
 *.log

@@ -67,7 +67,7 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
     url_alterar_perfil = 'https://sistec.mec.gov.br/index/selecionarinstituicao/alterar/perfil'
     url_index          = 'https://sistec.mec.gov.br/index/index'
     url_turmas         = 'https://sistec.mec.gov.br/gridciclo/turmas'
-    url_ciclo_common   = 'https://sistec.mec.gov.br/gridciclo/listaralunosacao/periodo/-1/ciclo/'
+    url_ciclo_common   = 'https://sistec.mec.gov.br/gridciclo/listaralunosacao/periodo//ciclo/'
     url_tempo_sessao   = 'https://sistec.mec.gov.br/tempo-sessao/get-tempo-sessao/'
     url_dados_ciclo    = 'https://sistec.mec.gov.br/admciclomatricula/dadosciclo/'
 
@@ -471,22 +471,22 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
             # PEGA OS DADOS DO CURSO:
             """
             curl 'https://sistec.mec.gov.br/admciclomatricula/dadosciclo/' \
+                -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36' \
                 -H 'Accept: application/json' \
                 -H 'Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7' \
+                -H 'X-Requested-With: XMLHttpRequest' \
+                -H 'X-Request: JSON' \
                 -H 'Connection: keep-alive' \
                 -H 'Content-type: application/x-www-form-urlencoded; charset=UTF-8' \
-                -H 'Cookie: sistecNoticias=0; PHPSESSID=j8fhj595d4irervirp5cv1tombl0kcp7; perfil_cookie=GESTOR+DA+UNIDADE+DE+ENSINO; co_usuario=1660670' \
-                -H 'Origin: https://sistec.mec.gov.br' \
-                -H 'Referer: https://sistec.mec.gov.br/index/index' \
-                -H 'Sec-Fetch-Dest: empty' \
-                -H 'Sec-Fetch-Mode: cors' \
-                -H 'Sec-Fetch-Site: same-origin' \
-                -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36' \
-                -H 'X-Request: JSON' \
-                -H 'X-Requested-With: XMLHttpRequest' \
                 -H 'sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"' \
                 -H 'sec-ch-ua-mobile: ?0' \
                 -H 'sec-ch-ua-platform: "Linux"' \
+                -H 'Sec-Fetch-Dest: empty' \
+                -H 'Sec-Fetch-Mode: cors' \
+                -H 'Sec-Fetch-Site: same-origin' \
+                -H 'Origin: https://sistec.mec.gov.br' \
+                -H 'Referer: https://sistec.mec.gov.br/index/index' \
+                -H 'Cookie: sistecNoticias=0; PHPSESSID=j8fhj595d4irervirp5cv1tombl0kcp7; perfil_cookie=GESTOR+DA+UNIDADE+DE+ENSINO; co_usuario=1660670' \
                 --data-raw 'idCiclo=1949843' \
                 --compressed
             """
@@ -498,8 +498,11 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
                 header_accept_enc,
                 header_xreq_xml,
                 header_xreq_json,
-                header_content_type,
                 header_connection,
+                header_content_type,
+                header_sec_ch_ua,
+                header_sec_ch_ua_mobile,
+                header_sec_ch_ua_platform,
                 header_sec_fetch_dest + 'empty',
                 header_sec_fetch_mode + 'cors',
                 header_sec_fetch_site + 'same-origin',
@@ -561,7 +564,23 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
             if ! co_polo:
                 co_polo = u''
             if co_polo == u'':
-                pass
+                d_campus = {
+                    u'CÂMPUS ÁGUAS LINDAS': 3647,
+                    u'CÂMPUS ANÁPOLIS': 699,
+                    u'CÂMPUS APARECIDA DE GOIÂNIA': 210,
+                    u'CÂMPUS CIDADE DE GOIÁS': 696,
+                    u'CÂMPUS FORMOSA': 2012,
+                    u'CÂMPUS GOIÂNIA': 212,
+                    u'CÂMPUS GOIÂNIA OESTE': 3646,
+                    u'CÂMPUS INHUMAS': 238,
+                    u'CÂMPUS ITUMBIARA': 244,
+                    u'CÂMPUS JATAÍ': 241,
+                    u'CÂMPUS LUZIÂNIA': 209,
+                    u'CÂMPUS SENADOR CANEDO': 3648,
+                    u'CÂMPUS URUAÇU': 161,
+                    u'CÂMPUS VALPARAÍSO': 3649
+                }
+                co_polo = d_campus[no_campus.upper()]
 
             line_common = []
             line_common.append(co_curso + u';')
@@ -579,22 +598,22 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
                 # =================
                 """
                 curl 'https://sistec.mec.gov.br/gridciclo/listaralunosacao/periodo//ciclo/2678641/coaluno/' \
+                    -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36' \
                     -H 'Accept: application/json' \
                     -H 'Accept-Language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7' \
+                    -H 'X-Requested-With: XMLHttpRequest' \
+                    -H 'X-Request: JSON' \
                     -H 'Connection: keep-alive' \
                     -H 'Content-type: application/x-www-form-urlencoded; charset=UTF-8' \
-                    -H 'Cookie: sistecNoticias=0; PHPSESSID=j8fhj595d4irervirp5cv1tombl0kcp7; perfil_cookie=GESTOR+DA+UNIDADE+DE+ENSINO; co_usuario=1660637' \
-                    -H 'Origin: https://sistec.mec.gov.br' \
-                    -H 'Referer: https://sistec.mec.gov.br/index/index' \
-                    -H 'Sec-Fetch-Dest: empty' \
-                    -H 'Sec-Fetch-Mode: cors' \
-                    -H 'Sec-Fetch-Site: same-origin' \
-                    -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36' \
-                    -H 'X-Request: JSON' \
-                    -H 'X-Requested-With: XMLHttpRequest' \
                     -H 'sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"' \
                     -H 'sec-ch-ua-mobile: ?0' \
                     -H 'sec-ch-ua-platform: "Linux"' \
+                    -H 'Sec-Fetch-Dest: empty' \
+                    -H 'Sec-Fetch-Mode: cors' \
+                    -H 'Sec-Fetch-Site: same-origin' \
+                    -H 'Origin: https://sistec.mec.gov.br' \
+                    -H 'Referer: https://sistec.mec.gov.br/index/index' \
+                    -H 'Cookie: sistecNoticias=0; PHPSESSID=j8fhj595d4irervirp5cv1tombl0kcp7; perfil_cookie=GESTOR+DA+UNIDADE+DE+ENSINO; co_usuario=1660637' \
                     --data-raw 'registros=30&pagina=2' \
                     --compressed
 
@@ -621,8 +640,11 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
                     header_accept_enc,
                     header_xreq_xml,
                     header_xreq_json,
-                    header_content_type,
                     header_connection,
+                    header_content_type,
+                    header_sec_ch_ua,
+                    header_sec_ch_ua_mobile,
+                    header_sec_ch_ua_platform,
                     header_sec_fetch_dest + 'empty',
                     header_sec_fetch_mode + 'cors',
                     header_sec_fetch_site + 'same-origin',
@@ -659,18 +681,18 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
                 file_json_r = open(alunos_json, mode='rb')
                 alunos_data = json.load(file_json_r)
                 file_json_r.close()
-                #  if level_debug[1]:
-                #      with open(file_log_path, 'a') as file_log:
-                #          file_log.write(u'%s url_ciclo:\t%s\n' % (
-                #              strftime('[%Y-%m-%d %H:%M:%S]'), url_ciclo))
-                #          file_log.write(u'%s http_header:\t%s\n' % (
-                #              strftime('[%Y-%m-%d %H:%M:%S]'), http_header))
-                #          file_log.write(u'%s post_data:\t%s\n' % (
-                #              strftime('[%Y-%m-%d %H:%M:%S]'), post_data))
-                #          file_log.write(u'%s alunos_data:\t%s\n' % (
-                #              strftime('[%Y-%m-%d %H:%M:%S]'), alunos_data))
-                #          file_log.flush()
-                #          fsync(file_log.fileno())
+                if level_debug[1]:
+                    with open(file_log_path, 'a') as file_log:
+                        file_log.write(u'%s url_ciclo:\t%s\n' % (
+                            strftime('[%Y-%m-%d %H:%M:%S]'), url_ciclo))
+                        file_log.write(u'%s http_header:\t%s\n' % (
+                            strftime('[%Y-%m-%d %H:%M:%S]'), http_header))
+                        file_log.write(u'%s post_data:\t%s\n' % (
+                            strftime('[%Y-%m-%d %H:%M:%S]'), post_data))
+                        file_log.write(u'%s alunos_data:\t%s\n' % (
+                            strftime('[%Y-%m-%d %H:%M:%S]'), alunos_data))
+                        file_log.flush()
+                        fsync(file_log.fileno())
 
                 try:
                     alunos = alunos_data['dados']
@@ -750,7 +772,8 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
                 if pagina_alunos < total_paginas_alunos:
                     pagina_alunos = pagina_alunos + 1
                     continue  # while alunos
-                break  # while alunos
+                else:
+                    break  # while alunos
 
         try:
             total_paginas_ciclos = turmas_data['totalPaginas']
@@ -760,7 +783,8 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
         if pagina_ciclos < total_paginas_ciclos:
             pagina_ciclos = pagina_ciclos + 1
             continue  # while ciclos
-        break  # while ciclos
+        else:
+            break  # while ciclos
 
     if lines:
         try:
