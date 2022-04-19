@@ -33,7 +33,7 @@ except PermissionError:
     print('Sem permissão de escrita no arquivo de log:\n%s' % file_debug_path)
     os._exit(1)
 file_debug.close()
-level_debug = [True, False, False]
+level_debug = [True, True, False]
 # CONFIG DEBUG: FIM
 # CONFIG PLANILHAS PRESENCIAIS: INICIO
 downPRE_Dir = u'%s' % getenv('SISTEC_DOWNLOAD_PLANILHAS_PRESENCIAL', default='../planilhas/presencial')
