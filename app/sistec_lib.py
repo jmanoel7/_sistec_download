@@ -450,8 +450,10 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
                 if not tipo_fic:
                     continue
             elif match_ead:
-                co_cursos = [338565, 338569, 338571, 338572, 338573, 338574, 338575,
-                    338578, 338580, 338581, 338582, 338583, 362343, 362344, 362345, 362346, 362347]
+                co_cursos = [
+                    338565, 338569, 338571, 338572, 338573, 338574, 338575, 338578, 338580,
+                    338581, 338582, 338583, 362343, 362344, 362345, 362346, 362347
+                ]
                 if (tipo_presencial and int(co_curso) in co_cursos) or (tipo_ead and int(co_curso) not in co_cursos):
                     pass
                 else:
