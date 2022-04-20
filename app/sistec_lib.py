@@ -560,35 +560,31 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
             co_tipo_oferta_curso = dados['co_tipo_oferta_curso']
 
             # PEGA O CODIGO DO POLO DO CURSO:
-            co_polo = dados['co_polo']
-            if ! co_polo:
-                co_polo = u''
-            if co_polo == u'':
-                d_campus = {
-                    u'CÂMPUS ÁGUAS LINDAS': 3647,
-                    u'CÂMPUS ANÁPOLIS': 699,
-                    u'CÂMPUS APARECIDA DE GOIÂNIA': 210,
-                    u'CÂMPUS CIDADE DE GOIÁS': 696,
-                    u'CÂMPUS FORMOSA': 2012,
-                    u'CÂMPUS GOIÂNIA': 212,
-                    u'CÂMPUS GOIÂNIA OESTE': 3646,
-                    u'CÂMPUS INHUMAS': 238,
-                    u'CÂMPUS ITUMBIARA': 244,
-                    u'CÂMPUS JATAÍ': 241,
-                    u'CÂMPUS LUZIÂNIA': 209,
-                    u'CÂMPUS SENADOR CANEDO': 3648,
-                    u'CÂMPUS URUAÇU': 161,
-                    u'CÂMPUS VALPARAÍSO': 3649
-                }
-                co_polo = d_campus[no_campus.upper()]
+            d_campus = {
+                u'CÂMPUS ÁGUAS LINDAS': 3647,
+                u'CÂMPUS ANÁPOLIS': 699,
+                u'CÂMPUS APARECIDA DE GOIÂNIA': 210,
+                u'CÂMPUS CIDADE DE GOIÁS': 696,
+                u'CÂMPUS FORMOSA': 2012,
+                u'CÂMPUS GOIÂNIA': 212,
+                u'CÂMPUS GOIÂNIA OESTE': 3646,
+                u'CÂMPUS INHUMAS': 238,
+                u'CÂMPUS ITUMBIARA': 244,
+                u'CÂMPUS JATAÍ': 241,
+                u'CÂMPUS LUZIÂNIA': 209,
+                u'CÂMPUS SENADOR CANEDO': 3648,
+                u'CÂMPUS URUAÇU': 161,
+                u'CÂMPUS VALPARAÍSO': 3649
+            }
+            co_polo = d_campus[no_campus.upper()]
 
             line_common = []
-            line_common.append(co_curso + u';')
+            line_common.append(str(co_curso) + u';')
             line_common.append(dt_data_inicio + u';')
             line_common.append(dt_data_fim_previsto + u';')
             line_common.append(no_ciclo_matricula + u';')
-            line_common.append(co_tipo_oferta_curso + u';')
-            line_common.append(co_polo + u';')
+            line_common.append(str(co_tipo_oferta_curso) + u';')
+            line_common.append(str(co_polo) + u';')
 
             continue_alunos = 0
             pagina_alunos = 1
