@@ -560,6 +560,8 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
 
             # PEGA O CODIGO DO TIPO DA OFERTA DO CURSO:
             co_tipo_oferta_curso = dados['co_tipo_oferta_curso']
+            if co_tipo_oferta_curso is None:
+                co_tipo_oferta_curso = 0
 
             # PEGA O CODIGO DO POLO DO CURSO:
             d_campus = {
