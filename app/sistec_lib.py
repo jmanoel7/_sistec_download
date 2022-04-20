@@ -467,7 +467,6 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
 
             # PEGA O CODIGO DO CICLO:
             co_ciclo = ciclos[i]['Código do Ciclo']
-            _co_ciclo = copy(co_ciclo)
 
             # PEGA OS DADOS DO CURSO:
             """
@@ -626,12 +625,13 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
                     with open(file_log_path, 'a') as file_log:
                         file_log.write(u'%s Acessando a lista de alunos (%s) do ciclo:\t%s ...\n' % (
                             strftime('[%Y-%m-%d %H:%M:%S]'), no_campus.title(), no_ciclo_matricula.title()))
+                        #  file_log.write(u'%s url_ciclo = %s + %s + /coaluno/\n' % (
+                            #  strftime('[%Y-%m-%d %H:%M:%S]'), url_ciclo_common, co_ciclo))
                         file_log.flush()
                         fsync(file_log.fileno())
                 headers = {}
-                str_co_ciclo = u' ' + str(_co_ciclo) + u' '
-                str_co_ciclo = str_co_ciclo.strip(u' ')
-                url_ciclo = url_ciclo_common + str_co_ciclo + '/coaluno/'
+                url_ciclo = url_ciclo_common + str(co_ciclo) + '/coaluno/'
+
                 http_header = [
                     header_user_agent,
                     header_accept_json,
