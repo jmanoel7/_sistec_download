@@ -628,7 +628,7 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
                         file_log.flush()
                         fsync(file_log.fileno())
                 headers = {}
-                url_ciclo = url_ciclo_common + co_ciclo + '/coaluno/'
+                url_ciclo = url_ciclo_common + str(co_ciclo) + '/coaluno/'
                 http_header = [
                     header_user_agent,
                     header_accept_json,
