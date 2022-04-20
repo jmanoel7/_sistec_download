@@ -421,52 +421,6 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
 
         for i in range(len(ciclos)):
 
-            # PEGA O TIPO DE CURSO:
-            tipo_curso = ciclos[i]['Tipo do Curso']
-
-            # PEGA O NOME DO CURSO:
-            nome_curso = ciclos[i]['Nome do Ciclo']
-
-            # VERIFICA SE CURSO EH DO TIPO FIC:
-            re_fic = re.compile(u'^.*FORMA[CÇ][AÃ]O\s*(INICIAL|CONTINUADA).*$')
-            match_fic = re_fic.search(tipo_curso)
-
-            # VERIFICA SE CURSO EH DO TIPO MULHERES MIL:
-            re_mm = re.compile(u'^.*MULHERES\s*MIL.*$')
-            match_mm = re_mm.search(tipo_curso)
-
-            # VERIFICA SE CURSO EH DO TIPO EAD:
-            re_ead = re.compile(u'^.*\s*DIST[AÂ]NCIA\s*$')
-            match_ead = re_ead.search(nome_curso)
-
-            # VERIFICA SE CURSO EH DO TIPO PRESENCIAL:
-            re_presencial = re.compile(u'^.*\s*PRESENCIAL\s*$')
-            match_presencial = re_presencial.search(nome_curso)
-
-            if match_fic:
-                if not tipo_fic:
-                    continue
-            elif match_mm:
-                if not tipo_fic:
-                    continue
-            elif match_ead:
-                co_cursos = [
-                    338565, 338569, 338571, 338572, 338573, 338574, 338575, 338578, 338580,
-                    338581, 338582, 338583, 362343, 362344, 362345, 362346, 362347
-                ]
-                if (tipo_presencial and int(co_curso) in co_cursos) or (tipo_ead and int(co_curso) not in co_cursos):
-                    pass
-                else:
-                    continue
-            elif match_presencial:
-                if not tipo_presencial:
-                    continue
-            else:
-                continue
-                # return (
-                #    False, u"não foi possível determinar o tipo do curso:\t%s" % nome_curso
-                # )
-
             # PEGA O CODIGO DO CICLO:
             co_ciclo = ciclos[i]['Código do Ciclo']
 
@@ -549,6 +503,52 @@ def write_csv(file_csv, no_campus, co_campus, perfil, qtdPerfis, tipos, cookies,
 
             # PEGA O CODIGO DO CURSO
             co_curso = dados['co_curso']
+
+            # PEGA O TIPO DE CURSO:
+            tipo_curso = ciclos[i]['Tipo do Curso']
+
+            # PEGA O NOME DO CURSO:
+            nome_curso = ciclos[i]['Nome do Ciclo']
+
+            # VERIFICA SE CURSO EH DO TIPO FIC:
+            re_fic = re.compile(u'^.*FORMA[CÇ][AÃ]O\s*(INICIAL|CONTINUADA).*$')
+            match_fic = re_fic.search(tipo_curso)
+
+            # VERIFICA SE CURSO EH DO TIPO MULHERES MIL:
+            re_mm = re.compile(u'^.*MULHERES\s*MIL.*$')
+            match_mm = re_mm.search(tipo_curso)
+
+            # VERIFICA SE CURSO EH DO TIPO EAD:
+            re_ead = re.compile(u'^.*\s*DIST[AÂ]NCIA\s*$')
+            match_ead = re_ead.search(nome_curso)
+
+            # VERIFICA SE CURSO EH DO TIPO PRESENCIAL:
+            re_presencial = re.compile(u'^.*\s*PRESENCIAL\s*$')
+            match_presencial = re_presencial.search(nome_curso)
+
+            if match_fic:
+                if not tipo_fic:
+                    continue
+            elif match_mm:
+                if not tipo_fic:
+                    continue
+            elif match_ead:
+                co_cursos = [
+                    338565, 338569, 338571, 338572, 338573, 338574, 338575, 338578, 338580,
+                    338581, 338582, 338583, 362343, 362344, 362345, 362346, 362347
+                ]
+                if (tipo_presencial and int(co_curso) in co_cursos) or (tipo_ead and int(co_curso) not in co_cursos):
+                    pass
+                else:
+                    continue
+            elif match_presencial:
+                if not tipo_presencial:
+                    continue
+            else:
+                continue
+                # return (
+                #    False, u"não foi possível determinar o tipo do curso:\t%s" % nome_curso
+                # )
 
             # PEGA AS DATAS DO INICO E DO FIM PREVISTO:
             dt_data_inicio = dados['dt_data_inicio']
